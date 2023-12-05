@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
       if (error.code === 11000) {
         // Duplicate key error
         const field = Object.keys(error.keyPattern)[0];
-        return res.status(400).send(`An account with that ${field} already exists. Both username and email must be unique`);
+        return res.status(400).send(`An account with this ${field} already exists. Both username and email must be unique`);
       }
       res.status(500).send(error.message);
     }
