@@ -6,20 +6,28 @@ const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-    try {
-      const { username, email, password } = req.body;
-      const user = new User({ username, email, password });
-      await user.save();
-      res.status(201).send('User registered successfully');
-    } catch (error) {
-      if (error.code === 11000) {
-        // Duplicate key error
-        const field = Object.keys(error.keyPattern)[0];
-        return res.status(400).send(`An account with this ${field} already exists. Both username and email must be unique`);
-      }
-      res.status(500).send(error.message);
+  try {
+    const { username, email, password } = req.body;
+
+    // Check password length
+    if (password.length < 8) {
+      return res.status(400).send('Password must be at least 8 characters long.');
     }
-  });
+
+    // Create a new user
+    const user = new User({ username, email, password });
+    await user.save();
+    res.status(201).send('User registered successfully');
+  } catch (error) {
+    if (error.code === 11000) {
+      // Handle duplicate key error
+      const field = error.keyPattern.username ? 'username' : 'email';
+      return res.status(400).send(`${field.charAt(0).toUpperCase() + field.slice(1)} already in use.`);
+    }
+    res.status(500).send('Internal server error');
+  }
+});
+
 
 // Login route
 router.post('/login', async (req, res) => {
