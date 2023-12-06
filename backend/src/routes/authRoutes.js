@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const admin = require('firebase-admin');
 
 // Register route
 router.post('/register', (req, res) => {
