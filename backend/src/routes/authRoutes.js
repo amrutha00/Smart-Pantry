@@ -1,48 +1,38 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const router = express.Router();
 
 // Register route
-router.post('/register', async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    // Check password length
-    if (password.length < 8) {
-      return res.status(400).send('Password must be at least 8 characters long.');
-    }
-
-    // Create a new user
-    const user = new User({ username, email, password });
-    await user.save();
-    res.status(201).send('User registered successfully');
-  } catch (error) {
-    if (error.code === 11000) {
-      // Handle duplicate key error
-      const field = error.keyPattern.username ? 'username' : 'email';
-      return res.status(400).send(`${field.charAt(0).toUpperCase() + field.slice(1)} already in use.`);
-    }
-    res.status(500).send('Internal server error');
-  }
+router.post('/register', (req, res) => {
+  const { email, password } = req.body;
+  admin.auth().createUser({
+    email: email,
+    password: password
+  })
+  .then(userRecord => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully created new user:', userRecord.uid);
+    res.status(201).send('User created successfully');
+  })
+  .catch(error => {
+    console.log('Error creating new user:', error);
+    res.status(500).send(error.message);
+  });
 });
 
 
 // Login route
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !await bcrypt.compare(password, user.password)) {
-      return res.status(401).send('Invalid credentials');
-    }
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(500).send(error.message);
-  }
+router.post('/login', (req, res) => {
+  const { idToken } = req.body;
+  admin.auth().verifyIdToken(idToken)
+    .then(decodedToken => {
+      const uid = decodedToken.uid;
+      // Use uid to get user information from your database, if needed
+      res.status(200).send(`User verified with UID: ${uid}`);
+    })
+    .catch(error => {
+      // Handle error
+      res.status(401).send('Invalid token');
+    });
 });
 
 module.exports = router;

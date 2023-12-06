@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./src/routes/authRoutes');
+const admin = require('firebase-admin');
 require('dotenv').config();
 
 const app = express();
@@ -18,3 +19,9 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/auth', authRoutes);
+
+var serviceAccount = require('./service-account.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
