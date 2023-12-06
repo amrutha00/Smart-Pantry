@@ -1,6 +1,7 @@
 import './SignUp.css';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import { auth } from "../../firebase";
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -9,9 +10,10 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
+import { useHistory } from "react-router-dom";
 
 function SignUp() {
-
+    const history = useHistory();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(false);
@@ -26,6 +28,7 @@ function SignUp() {
       createUserWithEmailAndPassword(auth, eml, pass)
         .then((userCredential) => {
           console.log(userCredential);
+          history.push("/sign-in");
         })
         .catch((error) => {
           console.log(error);
@@ -69,7 +72,7 @@ function SignUp() {
                     <Button className="sign-in" type="submit" variant="contained">Create Account</Button>
                     &nbsp;&nbsp;
                     <br /><br />
-                    <Button type="button" variant="text">Login</Button>
+                    <Button type="button" variant="text"><Link to='/sign-in'>Login</Link></Button>
                     <br />
                 </form>
           </Item>
