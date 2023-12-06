@@ -1,7 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const authRoutes = require('./src/routes/authRoutes');
+const foodItemsRoutes = require('./src/routes/foodItemsRoutes');
 const admin = require('firebase-admin');
+
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +21,7 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api', foodItemsRoutes);
 
 var serviceAccount = require('./service-account.json');
 
