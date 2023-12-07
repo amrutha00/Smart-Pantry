@@ -25,6 +25,9 @@ pages:
   artifacts:
     paths:
     - frontend/public
+    publish:
+    - frontend/public
+
 
   only:
     - main
