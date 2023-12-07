@@ -41,7 +41,7 @@ function App() {
         </Route>
 
         <Route exact path='*'>
-          <SignIn></SignIn>
+          <SignInSide></SignInSide>
         </Route>
       </Switch>
       
