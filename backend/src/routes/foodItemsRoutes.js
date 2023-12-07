@@ -81,6 +81,32 @@ router.put('/:id', verifyToken, async (req, res) => {
   }
 });
 
+// DELETE - Delete all food items
+router.delete('/expired', verifyToken, async (req, res) => {
+  try {
+      // Fetch user's timezone from Firestore
+      const userRef = db.collection('users').doc(req.user.email);
+      const doc = await userRef.get();
+      const userData = doc.data();
+      const timezone = userData ? userData.timezone : 'UTC';
+
+      // Find and delete all expired food items
+      const currentDate = moment().tz(timezone);
+      const result = await FoodItem.deleteMany({ 
+          userId: req.user.user_id,
+          expiryDate: { $lt: currentDate.toDate() } 
+      });
+
+      if (result.deletedCount === 0) {
+          return res.status(404).json({ message: "No expired food items found", data: {} });
+      }
+
+      res.status(200).json({ message: "Expired food items deleted successfully", data: { deletedCount: result.deletedCount } });
+  } catch (error) {
+      res.status(500).json({ message: error.message, data: {} });
+  }
+});
+
 
 // DELETE - Delete a food item
 router.delete('/:id', verifyToken, async (req, res) => {
