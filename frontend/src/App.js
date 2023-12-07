@@ -33,7 +33,7 @@ function App() {
           <SignUp></SignUp>
         </Route>
         <Route exact path='/home'>
-          {getAuth().currentUser && <Header></Header>}
+          <Header></Header>
           <Home></Home>
           {/* <AuthDetails></AuthDetails> */}
         </Route>
