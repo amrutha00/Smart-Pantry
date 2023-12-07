@@ -9,7 +9,7 @@ function Home() {
 
   return (
     <>  
-        <Header></Header>
+        {/* <Header></Header> */}
         {!user && history.push("/sign-in")}
         <h1>Welcome Home</h1>
     </>
