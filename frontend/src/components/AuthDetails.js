@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
 import {getAuth} from "firebase/auth";
 import { useHistory } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const AuthDetails = () => {
   const history = useHistory();
@@ -35,8 +37,9 @@ const AuthDetails = () => {
     <div>
       {authUser ? (
         <>
-          <p>{`Signed In as ${authUser.email}`}</p>
-          <button onClick={userSignOut}>Sign Out</button>
+          {/* <p>{`Signed In as ${authUser.email}`}</p> */}
+          {/* <button onClick={userSignOut}>Sign Out</button> */}
+          <Button type="button" color="error" onClick={userSignOut} variant="contained">Sign Out</Button>
         </>
       ) : (
         <p>Signed Out</p>

@@ -83,7 +83,7 @@ function SignIn() {
                     <Button className="sign-in" type="submit" variant="contained">Login</Button>
                     &nbsp;&nbsp;
                     <br /><br />
-                    <Button type="button" variant="text"><Link to='/sign-up'>Create Account</Link></Button>
+                    <Button type="button" color="warning" variant="contained"><Link to='/sign-up'>Create Account</Link></Button>
                     <br />
                 </form>
           </Item>

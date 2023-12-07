@@ -4,11 +4,22 @@ import SignUp from './components/auth/SignUp';
 import AuthDetails from './components/AuthDetails';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/home/Home';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 function App() {
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      primary: {
+        main: '#1976d2',
+      },
+    },
+  });
+
   return (
     <>
-
+    <ThemeProvider theme={darkTheme}>
     <Router basename='/'>
       <Switch>
         <Route exact path='/sign-in'>
@@ -19,7 +30,7 @@ function App() {
         </Route>
         <Route exact path='/home'>
           <Home></Home>
-          <AuthDetails></AuthDetails>
+          {/* <AuthDetails></AuthDetails> */}
         </Route>
 
         <Route exact path='*'>
@@ -29,6 +40,7 @@ function App() {
       
       
     </Router>
+    </ThemeProvider>
     </>
   );
 }
