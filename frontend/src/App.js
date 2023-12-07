@@ -7,6 +7,8 @@ import Home from './components/home/Home';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Header from './components/home/header/Header';
 import {getAuth} from "firebase/auth";
+import SignInSide from './components/auth/SignInSide';
+import SignUpSide from './components/auth/SignUpSide';
 
 function App() {
   let user = getAuth().currentUser;
@@ -27,10 +29,10 @@ function App() {
     <Router basename='/'>
       <Switch>
         <Route exact path='/sign-in'>
-          <SignIn></SignIn>
+          <SignInSide></SignInSide>
         </Route>
         <Route exact path='/sign-up'>
-          <SignUp></SignUp>
+          <SignUpSide></SignUpSide>
         </Route>
         <Route exact path='/home'>
           <Header></Header>
