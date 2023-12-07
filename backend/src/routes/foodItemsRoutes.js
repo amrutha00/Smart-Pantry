@@ -38,53 +38,70 @@ router.post('/', verifyToken, async (req, res) => {
 
 // GET - List all food items for a user
 router.get('/', verifyToken, async (req, res) => {
-    try {
+  try {
       // Fetch user's timezone from Firestore
       const userRef = db.collection('users').doc(req.user.email);
       const doc = await userRef.get();
       const userData = doc.data();
       const timezone = userData ? userData.timezone : 'UTC';
-      console.log(timezone);
-  
+
       // Fetch food items from MongoDB
       const foodItems = await FoodItem.find({ userId: req.user.user_id });
+      const currentDate = moment().tz(timezone);
+
       const transformedFoodItems = foodItems.map(item => {
-        const isExpired = isItemExpired(item, timezone);
-        return { ...item.toObject(), isExpired };
+          const expiryDate = moment(item.expiryDate).tz(timezone);
+          const isExpired = currentDate.isAfter(expiryDate);
+          const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days');
+
+          return { 
+              ...item.toObject(), 
+              isExpired, 
+              NumberOfDaysToExpire: numberOfDays 
+          };
       });
-  
+
       res.status(200).json({ message: "OK", data: transformedFoodItems });
-    } catch (error) {
+  } catch (error) {
       res.status(500).json({ message: error.message, data: {} });
-    }
+  }
 });
   
 // PUT - Update a food item
 router.put('/:id', verifyToken, async (req, res) => {
-  try {
-      const update = req.body;
-      const imageUrl = await fetchFoodItemImage(update.name); // Fetch new image URL
+    try {
+        const update = req.body;
+        const imageUrl = await fetchFoodItemImage(update.name); // Fetch new image URL
 
-      const updatedData = imageUrl ? { ...update, imageUrl } : update; // Include the new imageUrl if available
+        const updatedData = imageUrl ? { ...update, imageUrl } : update; // Include the new imageUrl if available
 
-      const foodItem = await FoodItem.findOneAndUpdate({ _id: req.params.id, userId: req.user.user_id }, updatedData, { new: true });
+        const foodItem = await FoodItem.findOneAndUpdate({ _id: req.params.id, userId: req.user.user_id }, updatedData, { new: true });
 
-      if (!foodItem) {
-          return res.status(404).json({ message: "Food item not found", data: {} });
-      }
+        if (!foodItem) {
+            return res.status(404).json({ message: "Food item not found", data: {} });
+        }
 
-      // Fetch user's timezone from Firestore
-      const userRef = db.collection('users').doc(req.user.email);
-      const doc = await userRef.get();
-      const userData = doc.data();
-      const timezone = userData ? userData.timezone : 'UTC';
+        // Fetch user's timezone from Firestore
+        const userRef = db.collection('users').doc(req.user.email);
+        const doc = await userRef.get();
+        const userData = doc.data();
+        const timezone = userData ? userData.timezone : 'UTC';
 
-      const updatedItem = { ...foodItem.toObject(), isExpired: isItemExpired(foodItem, timezone) };
+        const currentDate = moment().tz(timezone);
+        const expiryDate = moment(foodItem.expiryDate).tz(timezone);
+        const isExpired = currentDate.isAfter(expiryDate);
+        const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days');
 
-      res.status(200).json({ message: "OK", data: updatedItem });
-  } catch (error) {
-      res.status(400).json({ message: error.message, data: {} });
-  }
+        const updatedItem = { 
+            ...foodItem.toObject(), 
+            isExpired, 
+            NumberOfDaysToExpire: numberOfDays 
+        };
+
+        res.status(200).json({ message: "OK", data: updatedItem });
+    } catch (error) {
+        res.status(400).json({ message: error.message, data: {} });
+    }
 });
 
 // DELETE - Delete all food items
