@@ -7,33 +7,54 @@ const verifyToken = require('../middleware/verifyToken');
 
 // Create new user
 router.post('/', verifyToken, async (req, res) => {
-  try {
-      const userEmail = req.user.email; // Extracted from verified token
+    try {
+        const userEmail = req.user.email; // Extracted from verified token
+        const { name } = req.body; // Extract name from request body
 
-      // Use userEmail as the document ID
-      const userRef = db.collection('users').doc(userEmail);
-      await userRef.set({ email: userEmail, timezone: 'UTC' }, { merge: true });
+        // Validate the name
+        if (!name) {
+            return res.status(400).json({ message: "Name is required" });
+        }
 
-      res.status(201).json({ message: "User created successfully with default timezone" });
-  } catch (error) {
-      res.status(400).json({ message: error.message });
-  }
+        // Use userEmail as the document ID
+        const userRef = db.collection('users').doc(userEmail);
+        await userRef.set({ 
+            email: userEmail, 
+            timezone: 'UTC', 
+            name: name 
+        }, { merge: true });
+
+        res.status(201).json({ message: "User created successfully with default timezone and name" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 });
 
+
 // Update time zone
-router.post('/timezone', verifyToken, async (req, res) => {
-  try {
-      const { timezone } = req.body;
-      const userEmail = req.user.email; // Extracted from verified token
+router.post('/details', verifyToken, async (req, res) => {
+    try {
+        const { timezone, name } = req.body;
+        const userEmail = req.user.email; // Extracted from verified token
 
-      // Use userEmail as the document ID
-      const userRef = db.collection('users').doc(userEmail);
-      await userRef.update({ timezone });
+        // Create an update object
+        const updateData = {};
+        if (timezone) updateData.timezone = timezone;
+        if (name) updateData.name = name;
 
-      res.status(200).json({ message: "Timezone updated successfully" });
-  } catch (error) {
-      res.status(400).json({ message: error.message });
-  }
+        // Check if the update data is not empty
+        if (Object.keys(updateData).length === 0) {
+            return res.status(400).json({ message: "No data provided for update" });
+        }
+
+        // Use userEmail as the document ID
+        const userRef = db.collection('users').doc(userEmail);
+        await userRef.update(updateData);
+
+        res.status(200).json({ message: "User details updated successfully" });
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 });
 
 // Get User details
