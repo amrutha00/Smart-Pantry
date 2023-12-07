@@ -26,7 +26,9 @@ router.post('/', verifyToken, async (req, res) => {
           return res.status(400).json({ message: "The item is already expired", data: {} });
       }
 
-      const foodItem = new FoodItem({ userId, name, boughtDate, expiryDate });
+      const imageUrl = await fetchFoodItemImage(name);
+
+      const foodItem = new FoodItem({ userId, name, boughtDate, expiryDate, imageUrl });
       await foodItem.save();
       res.status(201).json({ message: "OK", data: foodItem });
   } catch (error) {
@@ -61,7 +63,11 @@ router.get('/', verifyToken, async (req, res) => {
 router.put('/:id', verifyToken, async (req, res) => {
   try {
       const update = req.body;
-      const foodItem = await FoodItem.findOneAndUpdate({ _id: req.params.id, userId: req.user.user_id }, update, { new: true });
+      const imageUrl = await fetchFoodItemImage(update.name); // Fetch new image URL
+
+      const updatedData = imageUrl ? { ...update, imageUrl } : update; // Include the new imageUrl if available
+
+      const foodItem = await FoodItem.findOneAndUpdate({ _id: req.params.id, userId: req.user.user_id }, updatedData, { new: true });
 
       if (!foodItem) {
           return res.status(404).json({ message: "Food item not found", data: {} });
@@ -124,6 +130,25 @@ router.delete('/:id', verifyToken, async (req, res) => {
 
 function isItemExpired(item, timezone) {
     return moment().tz(timezone).isAfter(moment(item.expiryDate));
+}
+
+
+// Fetch food image
+const axios = require('axios');
+async function fetchFoodItemImage(foodName) {
+    const apiKey = 'a4a6dbafa80448fdba702620b1258d93'; // Replace with your actual API key
+    const url = `https://api.spoonacular.com/food/ingredients/search?query=${foodName}&apiKey=${apiKey}&number=1`;
+    
+    try {
+        const response = await axios.get(url);
+        if (response.data.results.length > 0) {
+            return `https://spoonacular.com/cdn/ingredients_100x100/${response.data.results[0].image}`;
+        }
+        return null;
+    } catch (error) {
+        console.error('Error fetching food item image:', error);
+        return null;
+    }
 }
 
 module.exports = router;
