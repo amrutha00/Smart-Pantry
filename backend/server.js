@@ -1,10 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const authRoutes = require('./src/routes/authRoutes');
-const foodItemsRoutes = require('./src/routes/foodItemsRoutes');
-const admin = require('firebase-admin');
 
 require('dotenv').config();
+
+const authRoutes = require('./src/routes/authRoutes');
+const foodItemsRoutes = require('./src/routes/foodItemsRoutes');
+const userRoutes = require('./src/routes/userRoutes');
+const timezoneRoutes = require('./src/routes/timezoneRoutes');
 
 const app = express();
 
@@ -21,10 +23,6 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api', foodItemsRoutes);
-
-var serviceAccount = require('./service-account.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+app.use('/api/user', userRoutes);
+app.use('/api/timezone', timezoneRoutes);
+app.use('/api/food-items', foodItemsRoutes);
