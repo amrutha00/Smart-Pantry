@@ -231,8 +231,8 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                   </TableCell>
                   <TableCell align="center">{item.name}</TableCell>
                   <TableCell align="center">{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                  <TableCell align="right">{item.boughtDate}</TableCell>
-                  <TableCell align="right">{item.expiryDate}</TableCell>
+                  <TableCell align="right">{new Date(item.boughtDate).toDateString()}</TableCell>
+                  <TableCell align="right">{new Date(item.expiryDate).toDateString()}</TableCell>
                   <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
                   <TableCell align="right">
                     <IconButton onClick={() => deleteItem(item._id, user)}>
