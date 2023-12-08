@@ -18,6 +18,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import SettingsIcon from '@mui/icons-material/Settings';
+
 
 function Header() {
   const history = useHistory();
@@ -91,16 +93,17 @@ function Header() {
         </List>
         <Divider />
         <List>
-        {['Food Items', 'Settings'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-            <ListItemButton onClick={() => handleNavigation(text === 'Settings' ? '/settings' : '/food-items')}>
-                <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-            </ListItemButton>
-            </ListItem>
-        ))}
+            {['Food Items', 'Settings'].map((text, index) => (
+                <ListItem key={text} disablePadding>
+                    <ListItemButton onClick={() => handleNavigation(text)}>
+                        <ListItemIcon>
+                            {text === 'Settings' ? <SettingsIcon /> : <InboxIcon />} 
+                            {/* Replace with appropriate icon for each item */}
+                        </ListItemIcon>
+                        <ListItemText primary={text} />
+                    </ListItemButton>
+                </ListItem>
+            ))}
         </List>
     </Box>
     );
@@ -109,6 +112,9 @@ function Header() {
         history.push(path);
     };
       
+    const handleUserClick = () => {
+        history.push("/settings");
+    };
 
   return (
     <>
@@ -145,11 +151,20 @@ function Header() {
             {/* Display the user's name */}
             {userData && (
                 <Typography
-                variant="h6"
-                component="div"
-                sx={{ marginRight: "20px", marginLeft: "8px" }} // Adjust margin here
+                    variant="h6"
+                    component="div"
+                    sx={{ 
+                        marginRight: "20px", 
+                        marginLeft: "8px", 
+                        cursor: 'pointer',
+                        '&:hover': {
+                            color: 'secondary.main', // or any other color
+                            textDecoration: 'bold', // optional: if you want to underline on hover
+                        }
+                    }}
+                    onClick={handleUserClick}
                 >
-                {userData.name}
+                    {userData.name}
                 </Typography>
             )}
             {/* <Button color="inherit">Login</Button> */}
