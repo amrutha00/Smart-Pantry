@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { LocalizationProvider,  DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Box from '@mui/material/Box';
@@ -49,13 +50,17 @@ function FoodItems() {
 
   // State for the add item dialog
   const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
+  
 
   const [newItem, setNewItem] = useState({
     name: '',
-    purchaseDate: null, // Initialize with null or a default date
+    boughtDate: null, // Initialize with null or a default date
     expiryDate: null,   // Initialize with null or a default date
   });
   
+  // State for the edit item dialog
+const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
+const [editedItem, setEditedItem] = useState({ ...newItem });
 
   const handleOpenAddItemDialog = () => {
     setOpenAddItemDialog(true);
@@ -124,6 +129,45 @@ function FoodItems() {
     }
   };
 
+  //for update items
+
+  const handleEditItem = (itemToEdit) => {
+    setEditedItem({ ...itemToEdit });
+    setOpenEditItemDialog(true);
+  };
+  
+  const handleCloseEditItemDialog = () => {
+    setOpenEditItemDialog(false);
+  };
+  
+  const handleUpdateItem = async () => {
+    updateItem(user);
+  };
+  
+  const updateItem = async (authUser) => {
+    try {
+      const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+        body: JSON.stringify(editedItem),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update item');
+      }
+  
+      fetchItems(authUser);
+      handleCloseEditItemDialog();
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
+  };
+
+  
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
@@ -140,7 +184,7 @@ function FoodItems() {
             id="search-food"
             label="Search for food"
             variant="outlined"
-            style={{ marginBottom: 20 }}
+            style={{ margin: 20 }}
             InputProps={{
               endAdornment: (
                 <Button position="end">
@@ -149,10 +193,11 @@ function FoodItems() {
               ),
             }}
           />
-          <Button variant="outlined" color="primary" onClick={handleOpenAddItemDialog}>
+          
+          <Button variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
             Add Item
           </Button>
-        </div>
+          </div>
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
             <TableHead>
@@ -163,6 +208,7 @@ function FoodItems() {
                 <TableCell align="right">Purchase Date</TableCell>
                 <TableCell align="right">Expiry Date</TableCell>
                 <TableCell align="right">Days To Expire</TableCell>
+                <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
@@ -193,6 +239,12 @@ function FoodItems() {
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
+                  <TableCell align="right">
+                    <IconButton onClick={() => handleEditItem(item)}>
+                        <EditIcon />
+                    </IconButton>
+                  </TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
@@ -233,6 +285,38 @@ function FoodItems() {
             </Button>
           </DialogActions>
         </Dialog>
+
+        {/* Dialog for edit */}
+        <Dialog open={openEditItemDialog} onClose={handleCloseEditItemDialog}>
+  <DialogTitle>Edit Food Item</DialogTitle>
+  <DialogContent>
+    <TextField
+      label="Name"
+      fullWidth
+      margin="normal"
+      value={editedItem.name}
+      onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+    />
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label="Purchase Date"
+        onChange={(date) => setEditedItem({ ...editedItem, boughtDate: date })}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+      <DatePicker
+        label="Expiry Date"
+        onChange={(date) => setEditedItem({ ...editedItem, expiryDate: date })}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+    </LocalizationProvider>
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseEditItemDialog}>Cancel</Button>
+    <Button onClick={handleUpdateItem} color="primary">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
       </Paper>
     </Box>
   );
