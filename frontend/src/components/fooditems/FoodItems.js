@@ -16,8 +16,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  IconButton
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider,  DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Box from '@mui/material/Box';
@@ -88,6 +90,23 @@ function FoodItems() {
     }
   };
 
+  const deleteItem = async (itemId, authUser) => {
+    try {
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/";
+      const response = await fetch(`${endpoint}${itemId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete item');
+      }
+      fetchItems(authUser);
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
 
   const fetchItems = async (authUser) => {
     try {
@@ -144,6 +163,7 @@ function FoodItems() {
                 <TableCell align="right">Purchase Date</TableCell>
                 <TableCell align="right">Expiry Date</TableCell>
                 <TableCell align="right">Days To Expire</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -168,6 +188,11 @@ function FoodItems() {
                   <TableCell align="right">{item.boughtDate}</TableCell>
                   <TableCell align="right">{item.expiryDate}</TableCell>
                   <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
+                  <TableCell align="right">
+                    <IconButton onClick={() => deleteItem(item._id, user)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
