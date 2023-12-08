@@ -54,7 +54,7 @@ export default function SignInSide() {
     setPassword(data.get('password'));
     signInWithEmailAndPassword(auth, data.get('email'), data.get('password'))
         .then((userCredential) => {
-            //console.log(userCredential);
+            // console.log(userCredential);
             history.push("/home");
         })
         .catch((error) => {
