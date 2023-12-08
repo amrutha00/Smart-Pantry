@@ -58,7 +58,7 @@ export default function SignInSide() {
             history.push("/home");
         })
         .catch((error) => {
-            //console.log(error);
+            console.log(error);
             setError(true);
         });
     
@@ -66,7 +66,6 @@ export default function SignInSide() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {error && <Alert severity="error">Invalid Credentials</Alert>}
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -121,6 +120,8 @@ export default function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
+              {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>Invalid Credentials</Alert>}
+
               <Button
                 type="submit"
                 fullWidth
