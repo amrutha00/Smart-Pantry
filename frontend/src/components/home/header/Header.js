@@ -80,25 +80,11 @@ function Header() {
         onKeyDown={toggleDrawer(anchor, false)}
     >
         <List>
-        {['Home'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-            <ListItemButton>
-                <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-            </ListItemButton>
-            </ListItem>
-        ))}
-        </List>
-        <Divider />
-        <List>
-            {['Food Items', 'Settings'].map((text, index) => (
+            {['Home', 'Food Items', 'Settings'].map((text, index) => (
                 <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => handleNavigation(text)}>
                         <ListItemIcon>
-                            {text === 'Settings' ? <SettingsIcon /> : <InboxIcon />} 
-                            {/* Replace with appropriate icon for each item */}
+                            {text === 'Home' ? <InboxIcon /> : text === 'Settings' ? <SettingsIcon /> : <MailIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
@@ -106,15 +92,30 @@ function Header() {
             ))}
         </List>
     </Box>
-    );
+);
 
-    const handleNavigation = (path) => {
-        history.push(path);
-    };
+    const handleNavigation = (text) => {
+      switch (text) {
+          case 'Home':
+              history.push('/home');
+              break;
+          case 'Food Items':
+              break;
+          case 'Settings':
+              history.push('/settings');
+              break;
+          default:
+              break;
+      }
+  };
       
     const handleUserClick = () => {
         history.push("/settings");
     };
+
+    const handleTitleClick = () => {
+      history.push("/home");
+  };
 
   return (
     <>
@@ -145,8 +146,13 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              FoodApp
+            <Typography 
+                variant="h6" 
+                component="div" 
+                sx={{ flexGrow: 1, cursor: 'pointer' }} // Add cursor style
+                onClick={handleTitleClick} // Attach the click handler
+            >
+                FoodApp
             </Typography>
             {/* Display the user's name */}
             {userData && (

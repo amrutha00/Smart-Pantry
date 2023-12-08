@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useHistory } from "react-router-dom";
-import Header from "./header/Header";
+import Box from '@mui/material/Box';
+import Typography from "@mui/material/Typography";
 
 function Home() {
   const history = useHistory();
@@ -51,10 +52,14 @@ function Home() {
   const welcomeMessage = `Welcome home ${userData.name} !`;
 
   return (
-    <>
-      {/* <Header></Header> */}
-      <h1>{welcomeMessage}</h1>
-    </>
+    <Box bgcolor="black" display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+
+      <Typography
+        color="white"
+      >
+        {welcomeMessage}
+      </Typography>
+    </Box>
   );
 }
 
