@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useHistory } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
+import backgroundImage from '../../assets/home.jpg';
 
 function Home() {
   const history = useHistory();
@@ -52,11 +53,20 @@ function Home() {
   const welcomeMessage = `Welcome home ${userData.name} !`;
 
   return (
-    <Box bgcolor="black" display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-
-      <Typography
-        color="white"
-      >
+    <Box 
+      sx={{ 
+        bgcolor: 'black',
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',     // Cover the entire space of the box
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh'
+      }}
+    >
+      <Typography color="white">
         {welcomeMessage}
       </Typography>
     </Box>
