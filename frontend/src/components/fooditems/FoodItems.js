@@ -69,7 +69,8 @@ function FoodItems() {
 
   const addItems = async (authUser) => {
     try {
-      const response = await fetch("http://localhost:3000/api/food-items/", {
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +91,8 @@ function FoodItems() {
 
   const fetchItems = async (authUser) => {
     try {
-      const response = await fetch("http://localhost:3000/api/food-items/", {
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const response = await fetch(endpoint, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${authUser.accessToken}`,

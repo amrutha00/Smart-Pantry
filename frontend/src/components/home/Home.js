@@ -32,7 +32,8 @@ function Home() {
   // Fetch user data using the provided access token
   const fetchUserData = async (authUser) => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/", {
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/user";
+      const response = await fetch(endpoint, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${authUser.accessToken}`,

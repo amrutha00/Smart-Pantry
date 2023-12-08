@@ -43,7 +43,8 @@ function SettingsPage() {
   // Fetch user data using the provided access token
   const fetchUserData = async (authUser) => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/", {
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/user";
+      const response = await fetch(endpoint, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${authUser.accessToken}`,
@@ -58,7 +59,8 @@ function SettingsPage() {
 
   useEffect(() => {
     // Fetch the timezones
-    fetch("http://localhost:3000/api/timezone")
+    const endpoint = process.env.REACT_APP_BACKEND_API + "/timezone";
+    fetch(endpoint)
       .then(response => response.json())
       .then(data => setTimezones(data.data));
   }, []);
@@ -70,7 +72,8 @@ function SettingsPage() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/user/details", {
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/user/details";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
