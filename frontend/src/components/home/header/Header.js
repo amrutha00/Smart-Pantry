@@ -93,7 +93,7 @@ function Header() {
         <List>
         {['Food Items', 'Settings'].map((text, index) => (
             <ListItem key={text} disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => handleNavigation(text === 'Settings' ? '/settings' : '/food-items')}>
                 <ListItemIcon>
                 {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -104,6 +104,11 @@ function Header() {
         </List>
     </Box>
     );
+
+    const handleNavigation = (path) => {
+        history.push(path);
+    };
+      
 
   return (
     <>

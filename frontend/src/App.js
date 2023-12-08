@@ -9,6 +9,7 @@ import Header from './components/home/header/Header';
 import {getAuth} from "firebase/auth";
 import SignInSide from './components/auth/SignInSide';
 import SignUpSide from './components/auth/SignUpSide';
+import SettingsPage from './components/settings/SettingsPage'; 
 
 function App() {
   let user = getAuth().currentUser;
@@ -35,9 +36,11 @@ function App() {
         <Route exact path='/home'>
           <Header></Header>
           <Home></Home>
-          {/* <AuthDetails></AuthDetails> */}
         </Route>
-
+        <Route exact path='/settings'>
+          <Header />
+          <SettingsPage />
+        </Route>
         <Route exact path='*'>
           <SignInSide></SignInSide>
         </Route>
