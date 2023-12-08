@@ -81,7 +81,6 @@ export default function SignUpSide() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {error && <Alert severity="error">{error}</Alert>}
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -114,7 +113,7 @@ export default function SignUpSide() {
             <Typography component="h1" variant="h5">
               Sign Up
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '100%', maxWidth: '500px', mx: 'auto' }}>
               <TextField
                 margin="normal"
                 required
@@ -136,6 +135,7 @@ export default function SignUpSide() {
                 id="password"
                 autoComplete="current-password"
               />
+              {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
               <Button
                 type="submit"
                 fullWidth
