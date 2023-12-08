@@ -98,6 +98,7 @@ function Header() {
               history.push('/home');
               break;
           case 'Food Items':
+                history.push('/food-items');
               break;
           case 'Settings':
               history.push('/settings');

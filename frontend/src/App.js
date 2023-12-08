@@ -10,6 +10,7 @@ import {getAuth} from "firebase/auth";
 import SignInSide from './components/auth/SignInSide';
 import SignUpSide from './components/auth/SignUpSide';
 import SettingsPage from './components/settings/SettingsPage'; 
+import FoodItems from './components/fooditems/FoodItems';
 
 function App() {
   let user = getAuth().currentUser;
@@ -40,6 +41,10 @@ function App() {
         <Route exact path='/settings'>
           <Header />
           <SettingsPage />
+        </Route>
+        <Route exact path='/food-items'>
+          <Header />
+          <FoodItems />
         </Route>
         <Route exact path='*'>
           <SignInSide></SignInSide>

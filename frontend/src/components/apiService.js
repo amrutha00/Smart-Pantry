@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getAuth } from "firebase/auth";
 
 // Set up the base URL
-const API_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL || 'http://localhost:80';
+const API_BASE_URL = process.env.REACT_APP_BACKEND_BASE_URL || 'http://localhost:3000';
 
 console.log(API_BASE_URL);
 
