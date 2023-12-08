@@ -22,6 +22,8 @@ import { LocalizationProvider,  DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { get } from '../apiService';
 import { post } from '../apiService';
+import Box from '@mui/material/Box';
+
 
 function FoodItems() {
   const [items, setItems] = useState([]);
@@ -99,100 +101,102 @@ function FoodItems() {
   }
 
   return (
-    <Paper style={{ margin: 20, padding: 20 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <TextField
-          id="search-food"
-          label="Search for food"
-          variant="outlined"
-          style={{ marginBottom: 20 }}
-          InputProps={{
-            endAdornment: (
-              <Button position="end">
-                <SearchIcon />
-              </Button>
-            ),
-          }}
-        />
-        <Button variant="outlined" color="primary" onClick={handleOpenAddItemDialog}>
-          Add Item
-        </Button>
-      </div>
-      <TableContainer component={Paper}>
-        <Table aria-label="food items table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Food Item</TableCell>
-              <TableCell>Item</TableCell>
-              <TableCell>Is Expired</TableCell>
-              <TableCell align="right">Purchase Date</TableCell>
-              <TableCell align="right">Expiry Date</TableCell>
-              <TableCell align="right">Days To Expire</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {items.map((item) => (
-              <TableRow key={item._id}>
-                <TableCell>
-                  {item.imageUrl && (
-                    <CardMedia
-                      component="img"
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                      image={item.imageUrl}
-                      alt={item.name}
-                    />
-                  )}
-                </TableCell>
-                <TableCell align="center">{item.name}</TableCell>
-                <TableCell align="center">{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                <TableCell align="right">{item.boughtDate}</TableCell>
-                <TableCell align="right">{item.expiryDate}</TableCell>
-                <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Add Item Dialog */}
-      <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
-        <DialogTitle>Add New Food Item</DialogTitle>
-        <DialogContent>
+    <Box sx={{ pt: 8 }}>
+      <Paper style={{ margin: 20, padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <TextField
-            label="Name"
-            fullWidth
-            margin="normal"
-            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+            id="search-food"
+            label="Search for food"
+            variant="outlined"
+            style={{ marginBottom: 20 }}
+            InputProps={{
+              endAdornment: (
+                <Button position="end">
+                  <SearchIcon />
+                </Button>
+              ),
+            }}
           />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <DatePicker
-      label="Purchase Date"
-      value={newItem.boughtDate}
-      onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
-      renderInput={(params) => <TextField {...params} margin="normal" />}
-    />
-    <DatePicker
-      label="Expiry Date"
-      value={newItem.expiryDate}
-      onChange={(date) => setNewItem({ ...newItem, expiryDate: date })}
-      renderInput={(params) => <TextField {...params} margin="normal" />}
-    />
-  </LocalizationProvider>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddItemDialog} color="secondary">
-            Cancel
+          <Button variant="outlined" color="primary" onClick={handleOpenAddItemDialog}>
+            Add Item
           </Button>
-          <Button onClick={handleAddItem} color="primary">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Paper>
+        </div>
+        <TableContainer component={Paper}>
+          <Table aria-label="food items table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Food Item</TableCell>
+                <TableCell>Item</TableCell>
+                <TableCell>Is Expired</TableCell>
+                <TableCell align="right">Purchase Date</TableCell>
+                <TableCell align="right">Expiry Date</TableCell>
+                <TableCell align="right">Days To Expire</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {items.map((item) => (
+                <TableRow key={item._id}>
+                  <TableCell>
+                    {item.imageUrl && (
+                      <CardMedia
+                        component="img"
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                        }}
+                        image={item.imageUrl}
+                        alt={item.name}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell align="center">{item.name}</TableCell>
+                  <TableCell align="center">{item.isExpired ? 'Yes' : 'No'}</TableCell>
+                  <TableCell align="right">{item.boughtDate}</TableCell>
+                  <TableCell align="right">{item.expiryDate}</TableCell>
+                  <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Add Item Dialog */}
+        <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
+          <DialogTitle>Add New Food Item</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Name"
+              fullWidth
+              margin="normal"
+              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label="Purchase Date"
+        value={newItem.boughtDate}
+        onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+      <DatePicker
+        label="Expiry Date"
+        value={newItem.expiryDate}
+        onChange={(date) => setNewItem({ ...newItem, expiryDate: date })}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+    </LocalizationProvider>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseAddItemDialog} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleAddItem} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Paper>
+    </Box>
   );
 }
 

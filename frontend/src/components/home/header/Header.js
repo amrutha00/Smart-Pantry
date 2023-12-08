@@ -159,7 +159,7 @@ function Header() {
                 sx={{ flexGrow: 1, cursor: 'pointer' }} // Add cursor style
                 onClick={handleTitleClick} // Attach the click handler
             >
-                FoodApp
+                FreshPlate
             </Typography>
             {/* Display the user's name */}
             {userData && (
