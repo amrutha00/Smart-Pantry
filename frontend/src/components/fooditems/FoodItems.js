@@ -177,7 +177,7 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
   }
 
   return (
-    <Box sx={{ pt: 8 }}>
+    <Box sx={{ pt: 10 }} bgcolor="grey">
       <Paper style={{ margin: 20, padding: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <TextField
