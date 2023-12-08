@@ -24,8 +24,6 @@ function App() {
   return (
     <>
     <ThemeProvider theme={darkTheme}>
-    
-    
     <Router basename='/'>
       <Switch>
         <Route exact path='/sign-in'>
@@ -44,8 +42,6 @@ function App() {
           <SignInSide></SignInSide>
         </Route>
       </Switch>
-      
-      
     </Router>
     </ThemeProvider>
     </>
