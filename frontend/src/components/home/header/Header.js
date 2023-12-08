@@ -78,7 +78,7 @@ function Header() {
         onKeyDown={toggleDrawer(anchor, false)}
     >
         <List>
-        {['Dashboard'].map((text, index) => (
+        {['Home'].map((text, index) => (
             <ListItem key={text} disablePadding>
             <ListItemButton>
                 <ListItemIcon>
@@ -91,7 +91,7 @@ function Header() {
         </List>
         <Divider />
         <List>
-        {['All Items', 'Setting'].map((text, index) => (
+        {['Food Items', 'Settings'].map((text, index) => (
             <ListItem key={text} disablePadding>
             <ListItemButton>
                 <ListItemIcon>
@@ -142,7 +142,7 @@ function Header() {
                 <Typography
                 variant="h6"
                 component="div"
-                sx={{ marginRight: "8px", marginLeft: "8px" }} // Adjust margin here
+                sx={{ marginRight: "20px", marginLeft: "8px" }} // Adjust margin here
                 >
                 {userData.name}
                 </Typography>
