@@ -148,7 +148,7 @@ export default function SignUpSide() {
                 <Grid item xs>
                 </Grid>
                 <Grid item>
-                  <Link href="/sign-in" variant="body2">
+                  <Link href="/freshplate/sign-in" variant="body2">
                     {"Already have an account? Sign In"}
                   </Link>
                 </Grid>
