@@ -11,7 +11,7 @@ const verifyToken = require('../middleware/verifyToken');
 // POST - Create a new food item
 router.post('/', verifyToken, async (req, res) => {
   try {
-      const { name, boughtDate, expiryDate } = req.body;
+      const { name, quantity, boughtDate, expiryDate } = req.body;
       const userId = req.user.user_id;
 
       // Fetch user's timezone from Firestore
@@ -28,7 +28,7 @@ router.post('/', verifyToken, async (req, res) => {
 
       const imageUrl = await fetchFoodItemImage(name);
 
-      const foodItem = new FoodItem({ userId, name, boughtDate, expiryDate, imageUrl });
+      const foodItem = new FoodItem({ userId, name,quantity, boughtDate, expiryDate, imageUrl });
       await foodItem.save();
       res.status(201).json({ message: "OK", data: foodItem });
   } catch (error) {
