@@ -20,18 +20,34 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { LocalizationProvider,  DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { get } from '../apiService';
-import { post } from '../apiService';
 import Box from '@mui/material/Box';
+import { useHistory } from "react-router-dom";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 function FoodItems() {
+  const history = useHistory();
+  const [user, setUser] = useState(null);
   const [items, setItems] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
+      if (authUser) {
+        setUser(authUser);
+        fetchItems(authUser);
+      } else {
+        history.push("/sign-in");
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [history]);
 
   // State for the add item dialog
   const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
+
   const [newItem, setNewItem] = useState({
     name: '',
     purchaseDate: null, // Initialize with null or a default date
@@ -48,49 +64,44 @@ function FoodItems() {
   };
 
   const handleAddItem = async () => {
+    addItems(user);
+  };
+
+  const addItems = async (authUser) => {
     try {
-      // Perform the POST request to add the new item
-      await post('/api/food-items', newItem);
-
-      // Refresh the list of items
-      const response = await get('/api/food-items');
-      if (Array.isArray(response.data)) {
-        setItems(response.data);
-      } else {
-        setError('Invalid API response format.');
+      const response = await fetch("http://localhost:3000/api/food-items/", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authUser.accessToken}`
+        },
+        body: JSON.stringify(newItem)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add new item');
       }
-
-      // Close the dialog
+      fetchItems(authUser);
       handleCloseAddItemDialog();
-    } catch (err) {
-      console.error('Error adding item:', err);
-      setError('Error adding item.');
+    } catch (error) {
+      console.error("Error adding new item:", error);
     }
   };
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await get('/api/food-items');
-        console.log('API Response:', response); // Log the API response
-        if (Array.isArray(response.data)) {
-          setItems(response.data);
-        } else {
-          setError('Invalid API response format.');
-        }
-      } catch (err) {
-        console.error('API Request Error:', err); // Log the error
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchItems();
-  }, []);
 
-  if (isLoading) {
-    return <CircularProgress />;
-  }
+  const fetchItems = async (authUser) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/food-items/", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setItems(data.data);
+    } catch (error) {
+      console.error("Error fetching items data:", error);
+    }
+  };
 
   if (error) {
     return <Typography color="error">{error}</Typography>;
