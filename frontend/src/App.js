@@ -26,7 +26,7 @@ function App() {
   return (
     <>
     <ThemeProvider theme={darkTheme}>
-    <Router basename='/freshplate'>
+    <Router basename='/foodapp'>
       <Switch>
         <Route exact path='/sign-in'>
           <SignInSide></SignInSide>

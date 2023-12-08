@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import { auth } from "../../firebase";
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -148,7 +148,7 @@ export default function SignUpSide() {
                 <Grid item xs>
                 </Grid>
                 <Grid item>
-                  <Link href="/freshplate/sign-in" variant="body2">
+                  <Link to="/sign-in" variant="body2">
                     {"Already have an account? Sign In"}
                   </Link>
                 </Grid>

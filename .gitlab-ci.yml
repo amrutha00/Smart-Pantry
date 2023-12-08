@@ -1,7 +1,7 @@
 image: node:latest
 
 variables:
-  PUBLIC_URL: /freshplate
+  PUBLIC_URL: /foodapp
 
 cache:
   paths:
