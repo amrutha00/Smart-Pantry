@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Alert from '@mui/material/Alert';
+import backgroundImage from '../../assets/settings.jpg';
 
 function SettingsPage() {
   const history = useHistory();
@@ -94,8 +95,22 @@ function SettingsPage() {
   }
 
   return (
-    <Box bgcolor="black" display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-      <Card sx={{ minWidth: "100vh" }}>
+    <Box 
+        sx={{ 
+          bgcolor: 'black',
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          minHeight: '100vh',
+          pl: 25
+        }}
+    
+    >
+      <Card sx={{ minWidth: "100vh", ml:  25 }}>
         <CardContent>
           <Typography variant="h5" component="div">
             Settings
