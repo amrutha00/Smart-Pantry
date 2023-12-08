@@ -31,37 +31,47 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignUpSide() {
-    const history = useHistory();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
-
+  const history = useHistory();
+  const [error, setError] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
-
-    setEmail(data.get('email'));
-    setPassword(data.get('password'));
-    createUserWithEmailAndPassword(auth, data.get('email'), data.get('password'))
+    console.log(username);
+    createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      console.log(userCredential);
+      addUser(userCredential.user, data.get('username'));
       history.push("/sign-in");
     })
     .catch((error) => {
       console.log(error);
       setError(getErrorMessage(error.code));
     });
-    
+  };
+
+  const addUser = async (authUser, username) => {
+    try {
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/user/";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+        body: JSON.stringify({ name: username }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add user details');
+      }
+    } catch (error) {
+      console.error("Error adding user data:", error);
+    }
   };
 
   function getErrorMessage(errorCode) {
@@ -124,6 +134,17 @@ export default function SignUpSide() {
                 type="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <TextField
+                  margin="normal"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Name"
+                  name="username"
+                  autoComplete="username"
+                  onChange={(e) => setUsername(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -134,6 +155,7 @@ export default function SignUpSide() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e) => setPassword(e.target.value)}
               />
               {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
               <Button
@@ -141,6 +163,7 @@ export default function SignUpSide() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                disabled={!email || !username || !password}
               >
                 Sign Up
               </Button>
