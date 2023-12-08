@@ -59,14 +59,29 @@ export default function SignUpSide() {
     })
     .catch((error) => {
       console.log(error);
-      setError(true);
+      setError(getErrorMessage(error.code));
     });
     
   };
 
+  function getErrorMessage(errorCode) {
+    switch (errorCode) {
+        case 'auth/email-already-in-use':
+            return 'Email already exists';
+        case 'auth/invalid-email':
+            return 'Invalid email address';
+        case 'auth/weak-password':
+            return 'Password is too weak';
+        case 'auth/missing-password':
+            return 'Password is missing'
+        default:
+            return 'An error occurred during sign up';
+    }
+}
+
   return (
     <ThemeProvider theme={defaultTheme}>
-      {error && <Alert severity="error">Invalid Password</Alert>}
+      {error && <Alert severity="error">{error}</Alert>}
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
