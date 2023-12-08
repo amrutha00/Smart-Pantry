@@ -17,6 +17,7 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from '@mui/icons-material/Home';
 import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
+import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 
 
 function Header() {
@@ -83,7 +84,7 @@ function Header() {
                 <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => handleNavigation(text)}>
                         <ListItemIcon>
-                            {text === 'Home' ? <HomeIcon /> : text === 'Settings' ? <SettingsIcon /> : <MailIcon />}
+                            {text === 'Home' ? <HomeIcon /> : text === 'Settings' ? <SettingsIcon /> : text === 'Food Items' ? <DinnerDiningIcon /> : <MailIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
