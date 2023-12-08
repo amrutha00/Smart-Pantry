@@ -5,18 +5,16 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import AuthDetails from "../../AuthDetails";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
+import HomeIcon from '@mui/icons-material/Home';
 import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
 
@@ -84,7 +82,7 @@ function Header() {
                 <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => handleNavigation(text)}>
                         <ListItemIcon>
-                            {text === 'Home' ? <InboxIcon /> : text === 'Settings' ? <SettingsIcon /> : <MailIcon />}
+                            {text === 'Home' ? <HomeIcon /> : text === 'Settings' ? <SettingsIcon /> : <MailIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
@@ -126,6 +124,14 @@ function Header() {
               anchor={anchor}
               open={state[anchor]}
               onClose={toggleDrawer(anchor, false)}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              PaperProps={{ 
+                sx: { 
+                  marginTop: '64px' // Adjust this value based on your AppBar's height
+                } 
+              }}
             >
               {list(anchor)}
             </Drawer>
