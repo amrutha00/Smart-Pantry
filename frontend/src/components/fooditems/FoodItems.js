@@ -26,7 +26,39 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { styled } from '@mui/material/styles';
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+    margin: theme.spacing(3),
+    padding: theme.spacing(3),
+    background: theme.palette.background.default,
+  }));
+  
+  const StyledTableHead = styled(TableHead)(({ theme }) => ({
+    backgroundColor: theme.palette.text.disabled,
+    '& th': {
+      color: theme.palette.primary.contrastText,
+    },
+  }));
+  
+  const StyledAddButton = styled(Button)(({ theme }) => ({
+    backgroundColor: theme.palette.primary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.success.dark,
+    },
+  }));
+  
+  const SearchField = styled(TextField)(({ theme }) => ({
+    '& .MuiOutlinedInput-root': {
+      paddingRight: 0,
+    },
+  }));
+  
+  const ActionButton = styled(IconButton)(({ theme }) => ({
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  }));
 
 function FoodItems() {
   const history = useHistory();
@@ -177,10 +209,10 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
   }
 
   return (
-    <Box sx={{ pt: 10 }} bgcolor="grey">
-      <Paper style={{ margin: 20, padding: 20 }}>
+    <Box sx={{ pt: 8 }} bgcolor="grey">
+      <StyledPaper style={{ margin: 20, padding: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <TextField
+          <SearchField
             id="search-food"
             label="Search for food"
             variant="outlined"
@@ -194,13 +226,13 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
             }}
           />
           
-          <Button variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
+          <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
             Add Item
-          </Button>
+          </StyledAddButton>
           </div>
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
-            <TableHead>
+            <StyledTableHead>
               <TableRow>
                 <TableCell>Food Item</TableCell>
                 <TableCell>Item</TableCell>
@@ -211,7 +243,7 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                 <TableCell align="right"></TableCell>
                 <TableCell align="right"></TableCell>
               </TableRow>
-            </TableHead>
+            </StyledTableHead>
             <TableBody>
               {items.map((item) => (
                 <TableRow key={item._id}>
@@ -235,14 +267,14 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                   <TableCell align="right">{new Date(item.expiryDate).toDateString()}</TableCell>
                   <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => deleteItem(item._id, user)}>
+                    <ActionButton onClick={() => deleteItem(item._id, user)}>
                       <DeleteIcon />
-                    </IconButton>
+                    </ActionButton>
                   </TableCell>
                   <TableCell align="right">
-                    <IconButton onClick={() => handleEditItem(item)}>
+                    <ActionButton onClick={() => handleEditItem(item)}>
                         <EditIcon />
-                    </IconButton>
+                    </ActionButton>
                   </TableCell>
 
                 </TableRow>
@@ -255,19 +287,21 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
         <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
           <DialogTitle>Add New Food Item</DialogTitle>
           <DialogContent>
-            <TextField
+            <SearchField
               label="Name"
               fullWidth
               margin="normal"
               onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
+            
       <DatePicker
         label="Purchase Date"
         value={newItem.boughtDate}
         onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
         renderInput={(params) => <TextField {...params} margin="normal" />}
       />
+      
       <DatePicker
         label="Expiry Date"
         value={newItem.expiryDate}
@@ -317,7 +351,7 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
     </Button>
   </DialogActions>
 </Dialog>
-      </Paper>
+      </StyledPaper>
     </Box>
   );
 }
