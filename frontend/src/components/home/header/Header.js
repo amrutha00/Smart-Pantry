@@ -175,7 +175,6 @@ function Header() {
                 style={{ width: '150px', height: '50px', marginTop: '10px' }} // Adjust the width, height, and margin as needed
               />
             </Typography>
-            {/* Display the user's name */}
             {userData && (
               <Box
                 sx={{ 
