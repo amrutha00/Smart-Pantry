@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useHistory } from 'react-router-dom';
-import { Box, Card, CardActionArea, Typography } from '@mui/material';
+import { Box, Card, CardActionArea, Typography, CardContent} from '@mui/material';
 import backgroundImage from '../../assets/home-micro.jpg';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function Home() {
   const history = useHistory();
@@ -71,19 +72,29 @@ function Home() {
         </Typography>
       </Box>
       <Box display="flex" justifyContent="space-around" alignItems="center" paddingX="5%">
-        <Card sx={{ width: '45%', height: 200, '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}>
-          <CardActionArea onClick={() => navigateTo('/food-items')}>
-            <Typography variant="h6" sx={{ textAlign: 'center', p: 3 }}>
-              Food Items - Add and View food items to track your pantry.
+      <Card onClick={() => navigateTo('/food-items')} sx={{ width: '45%', height: 200, '&:hover': { cursor: 'pointer', backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', fontFamily: 'Arial', color: 'white' }}>
+              Food Items
             </Typography>
-          </CardActionArea>
+            <Box sx={{ marginTop: 2 }}> {/* Adjust the top margin as needed */}
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                Add and View food items to track your pantry
+              </Typography>
+            </Box>
+          </CardContent>
         </Card>
-        <Card sx={{ width: '45%', height: 200, '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}>
-          <CardActionArea onClick={() => navigateTo('/discover')}>
-            <Typography variant="h6" sx={{ textAlign: 'center', p: 3 }}>
-              Discover - Find food items expiring soon and discover recipes to cook with them.
+        <Card onClick={() => navigateTo('/discover')} sx={{ width: '45%', height: 200, '&:hover': { cursor: 'pointer', backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', fontFamily: 'Arial', color: 'white' }}>
+              Discover
             </Typography>
-          </CardActionArea>
+            <Box sx={{ marginTop: 2 }}> {/* Adjust the top margin as needed */}
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                Find food expiring soon and Discover Recipes with them
+              </Typography>
+            </Box>
+          </CardContent>
         </Card>
       </Box>
     </Box>
