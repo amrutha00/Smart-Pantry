@@ -34,7 +34,7 @@ import backgroundImage from '../../assets/fooditems.jpg';
 const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: theme.spacing(3),
     padding: theme.spacing(3),
-    background: theme.palette.background.default,
+    background: theme.palette.background.default
   
 }));
   
@@ -287,9 +287,9 @@ function FoodItems() {
     return <Typography color="error">{error}</Typography>;
   }
 
-  if (items.length === 0) {
-    return <Typography>No food items found.</Typography>;
-  }
+  // if (items.length === 0) {
+  //   return <Typography>No food items found.</Typography>;
+  // }
 
   return (
     <Box 
@@ -299,6 +299,7 @@ function FoodItems() {
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
         backgroundPosition: 'center',
         display: 'flex', 
         justifyContent: 'center', 
