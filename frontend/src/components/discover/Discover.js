@@ -136,7 +136,7 @@ function Discover() {
             <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <CardActionArea onClick={() => handleBoxClick(7)} sx={{ textAlign: 'center' }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
-                  Foods expiring in one week
+                  Food expiring in one week
                 </Typography>
                 <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
               </CardActionArea>
