@@ -317,7 +317,7 @@ function Discover() {
     onClick={fetchRecipes}
   >
     <CardContent sx={{ textAlign: 'center', p: 2 }}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial', color: 'white' }}>
+      <Typography variant="h4" sx={{ textAlign: 'left', fontWeight: 'bold', fontFamily: 'Arial', color: 'white' }}>
         Discover Recipes
       </Typography>
     </CardContent>
