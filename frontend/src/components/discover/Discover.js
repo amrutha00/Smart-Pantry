@@ -228,7 +228,7 @@ function Discover() {
     >
       <CardContent sx={{ textAlign: 'center', p: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial', color: 'white', textAlign: 'left' }}>
-          Food already expired
+          Food already Expired
         </Typography>
       </CardContent>
       <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)' }}>
@@ -288,7 +288,7 @@ function Discover() {
   >
     <CardContent sx={{ textAlign: 'center', p: 2 }}>
       <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial', color: 'white', textAlign: 'left' }}>
-        Food expiring in next one week
+        Food expiring in next One Week
       </Typography>
     </CardContent>
     <Box sx={{ position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)' }}>
