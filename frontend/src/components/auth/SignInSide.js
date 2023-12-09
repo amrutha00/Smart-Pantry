@@ -18,6 +18,8 @@ import { dark } from '@mui/material/styles/createPalette';
 import logoImage from '../../assets/logo5.png';
 import homeImage from '../../assets/home-micro.jpg';
 import settingsImage from '../../assets/settings-micro.jpg';
+import discoverImage from '../../assets/discover.jpg';
+import foodItemsImage from '../../assets/fooditems.jpg';
 
 function Copyright(props) {
   return (
@@ -32,8 +34,6 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
@@ -43,7 +43,7 @@ export default function SignInSide() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    preloadImages(logoImage, homeImage, settingsImage); 
+    preloadImages(logoImage, homeImage, settingsImage, discoverImage, foodItemsImage); 
   }, []);
 
   const preloadImages = (...images) => {

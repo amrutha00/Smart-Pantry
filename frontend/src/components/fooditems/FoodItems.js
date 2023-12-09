@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -30,44 +29,47 @@ import { styled } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import backgroundImage from '../../assets/fooditems.jpg';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: theme.spacing(3),
     padding: theme.spacing(3),
     background: theme.palette.background.default,
-  }));
   
-  const StyledTableHead = styled(TableHead)(({ theme }) => ({
+}));
+  
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
     backgroundColor: theme.palette.text.disabled,
     '& th': {
       color: theme.palette.primary.contrastText,
       fontWeight: 'bold',
       fontSize: '1.2rem',
     },
-  }));
   
-  const StyledAddButton = styled(Button)(({ theme }) => ({
+}));
+  
+const StyledAddButton = styled(Button)(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
     '&:hover': {
       backgroundColor: theme.palette.success.dark,
     },
-  }));
+}));
   
-  const SearchField = styled(TextField)(({ theme }) => ({
+const SearchField = styled(TextField)(({ theme }) => ({
     '& .MuiOutlinedInput-root': {
       paddingRight: 0,
     },
-  }));
+}));
   
-  const ActionButton = styled(IconButton)(({ theme }) => ({
+const ActionButton = styled(IconButton)(({ theme }) => ({
     '&:hover': {
       backgroundColor: theme.palette.action.hover,
     },
-  }));
+}));
 
-  const StyledDeleteIcon = styled(DeleteIcon)({
+const StyledDeleteIcon = styled(DeleteIcon)({
     color: '#ff6666',
-  });
+});
 
 function FoodItems() {
   const history = useHistory();
@@ -276,7 +278,22 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
   }
 
   return (
-    <Box sx={{ pt: 8, minHeight: '100vh'}} bgcolor="grey">
+    <Box 
+      sx={{ 
+        pt: 8, 
+        minHeight: '100vh',
+        bgcolor: 'black',
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center'
+      }} 
+    >
+
+
       <StyledPaper style={{ margin: 20, padding: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchField
