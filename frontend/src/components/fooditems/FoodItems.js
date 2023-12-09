@@ -276,7 +276,7 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
   }
 
   return (
-    <Box sx={{ pt: 8 }} bgcolor="grey">
+    <Box sx={{ pt: 8, minHeight: '100vh'}} bgcolor="grey">
       <StyledPaper style={{ margin: 20, padding: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <SearchField
