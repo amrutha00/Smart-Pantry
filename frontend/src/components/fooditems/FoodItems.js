@@ -41,6 +41,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.text.disabled,
     '& th': {
       color: theme.palette.primary.contrastText,
+      fontWeight: 'bold',
+      fontSize: '1.2rem',
     },
   }));
   
@@ -293,9 +295,20 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
         />
 
           <div>
-            <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
-              Add Item
-            </StyledAddButton>
+          <StyledAddButton 
+            variant="contained" 
+            sx={{ 
+              backgroundColor: 'green',
+              '&:hover': {
+                backgroundColor: 'darkgreen',
+              },
+              margin: 2
+            }}
+            onClick={handleOpenAddItemDialog}
+          >
+            Add Item
+          </StyledAddButton>
+
 
             <StyledAddButton 
                     variant="contained" 
