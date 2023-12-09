@@ -224,7 +224,28 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
     }
   };
 
-  
+  const handleDeleteAllExpired = async () => {
+    try {
+            const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/expired";
+            const response = await fetch(endpoint, {
+            method: "DELETE",
+            headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+            },
+            });
+            
+            if (response.ok) {
+            fetchItems(user);
+            } else {
+            // Handle API error response
+            throw new Error('Failed to delete expired items');
+            }
+
+        } catch (error) {
+        console.error("Error deleting expired items", error);
+        }
+    };
+
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
@@ -249,10 +270,21 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                 </Button>
               ),
             }}
+            
           />
           
           <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
             Add Item
+          </StyledAddButton>
+
+          <StyledAddButton 
+                  variant="contained" 
+                  color="error" 
+                //   sx={{ mb: 2 }}
+                style={{ margin: 20 }}
+                  onClick={handleDeleteAllExpired}
+                >
+                  Delete all expired items
           </StyledAddButton>
           </div>
         <TableContainer component={Paper}>
