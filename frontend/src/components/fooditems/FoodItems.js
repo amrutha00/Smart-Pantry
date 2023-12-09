@@ -132,6 +132,12 @@ function FoodItems() {
     setOpenAddItemDialog(false);
     setexpiryError(false);
     setexpiryError2(false);
+    setNewItem({
+      name: '',
+      quantity: '',
+      boughtDate: null,
+      expiryDate: null,
+    })
   };
 
   const handleAddItem = async () => {
@@ -151,7 +157,6 @@ function FoodItems() {
     });
     setItems(sortedItems);
   };
-  
 
   const addItems = async (authUser) => {
     const currentDate = new Date();
@@ -160,14 +165,14 @@ function FoodItems() {
     // Check if the expiryDate is greater than or equal to the current date
     if (expiryDate.getTime() < currentDate.getTime()) {
         setexpiryError(true);
-        console.log("set expiry error");
+        console.log("Item already expired error");
         return;
     }
 
     if (expiryDate.getTime() <= boughtDate.getTime()) {
         setexpiryError2(true);
-        console.log("set expiry error2");
-          return; 
+        console.log("Expiry date is before purchase date error");
+        return; 
     }
 
     try {
@@ -183,8 +188,8 @@ function FoodItems() {
       if (!response.ok) {
         throw new Error('Failed to add new item');
       }
-      fetchItems(authUser);
       handleCloseAddItemDialog();
+      fetchItems(authUser);
     } catch (error) {
       console.error("Error adding new item:", error);
     }
@@ -193,7 +198,7 @@ function FoodItems() {
   const deleteItem = async (itemId, authUser) => {
     try {
         const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/";
-      const response = await fetch(`${endpoint}${itemId}`, {
+        const response = await fetch(`${endpoint}${itemId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${authUser.accessToken}`,
@@ -419,18 +424,19 @@ function FoodItems() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   label="Purchase Date"
-                  value={newItem.boughtDate}
-                  onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
+                  onChange={(date) => {
+                    setNewItem({ ...newItem, boughtDate: date });
+                    setexpiryError2(false);
+                  }}
                   renderInput={(params) => <TextField {...params} margin="normal" />}
                 />
                 
                 <DatePicker
                   label="Expiry Date"
-                  value={newItem.expiryDate}
                   onChange={(date) => {
                       setNewItem({ ...newItem, expiryDate: date });
-                      setexpiryError(false); // Set expiryError to false
-                      setexpiryError2(false); // Set expiryError2 to false
+                      setexpiryError(false);
+                      setexpiryError2(false);
                     }}
                   renderInput={(params) => <TextField {...params} margin="normal" />}
                 />
