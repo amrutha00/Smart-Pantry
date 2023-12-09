@@ -21,6 +21,9 @@ import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import ExploreIcon from '@mui/icons-material/Explore';
 import logoImage from '../../../assets/logo5.png'; // Adjust the path as needed
 import PersonIcon from '@mui/icons-material/Person';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 function Header() {
   const history = useHistory();
@@ -29,6 +32,23 @@ function Header() {
   const [state, setState] = useState({
     left: false,
   });
+
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    console.log(event.currentTarget.innerText);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+    let clicked = event.currentTarget.innerText;
+    if(clicked == 'Settings'){
+        history.push("/settings");
+    }else if(clicked == 'Profile'){
+        history.push("/home");
+    }
+  };
 
   useEffect(() => {
     // Listen for changes in authentication state
@@ -118,9 +138,9 @@ function Header() {
       }
   };
       
-    const handleUserClick = () => {
-        history.push("/settings");
-    };
+    // const handleUserClick = () => {
+    //     history.push("/settings");
+    // };
 
     const handleTitleClick = () => {
       history.push("/home");
@@ -175,31 +195,63 @@ function Header() {
                 style={{ width: '150px', height: '50px', marginTop: '10px' }} // Adjust the width, height, and margin as needed
               />
             </Typography>
-            {userData && (
-              <Box
-                sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  marginRight: "20px", 
-                  marginLeft: "8px", 
-                  cursor: 'pointer',
-                  '&:hover': {
-                    color: 'secondary.main', // or any other color
-                    textDecoration: 'bold', // optional: if you want to underline on hover
-                  }
-                }}
-                onClick={handleUserClick}
-              >
-                <PersonIcon sx={{ marginRight: 1 }}/> {/* Adjust the margin as needed */}
-                <Typography
-                  variant="h6"
-                  component="div"
+
+
+
+
+            <Button
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
                 >
-                  {userData.name}
-                </Typography>
-              </Box>
-            )}
-            <AuthDetails></AuthDetails>
+                {userData && (
+                    <Box
+                        sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        marginRight: "20px", 
+                        marginLeft: "8px", 
+                        cursor: 'pointer',
+                        color: 'white',
+                        '&:hover': {
+                            color: 'secondary.main', // or any other color
+                            textDecoration: 'bold', // optional: if you want to underline on hover
+                        }
+                        }}
+                    >
+                        <PersonIcon sx={{ marginRight: 1 }}/> {/* Adjust the margin as needed */}
+                        <Typography
+                        variant="h6"
+                        component="div"
+                        >
+                        {userData.name}
+                        </Typography>
+                    </Box>
+                    )}
+            </Button>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                }}
+                >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>Settings</MenuItem>
+                <MenuItem onClick={handleClose}><AuthDetails></AuthDetails></MenuItem>
+            </Menu>
+
+
+
+
+
+
+
+
           </Toolbar>
         </AppBar>
       </Box>
