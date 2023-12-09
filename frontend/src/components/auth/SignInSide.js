@@ -6,8 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import { auth } from "../../firebase";
 // import Link from '@mui/material/Link';
@@ -98,7 +96,7 @@ export default function SignInSide() {
             <Typography component="h1" variant="h5">
               Sign In
             </Typography>
-            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1, width: '100%', maxWidth: '500px', mx: 'auto' }}>
               <TextField
                 margin="normal"
                 required
