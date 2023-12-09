@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useHistory } from "react-router-dom";
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
-import backgroundImage from '../../assets/home.jpg';
+import backgroundImage from '../../assets/home-micro.jpg';
 
 function Home() {
   const history = useHistory();

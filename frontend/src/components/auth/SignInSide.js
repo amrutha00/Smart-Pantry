@@ -16,8 +16,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { dark } from '@mui/material/styles/createPalette';
 import logoImage from '../../assets/logo5.png';
-import homeImage from '../../assets/home.jpg';
-import settingsImage from '../../assets/settings.jpg';
+import homeImage from '../../assets/home-micro.jpg';
+import settingsImage from '../../assets/settings-micro.jpg';
 
 function Copyright(props) {
   return (

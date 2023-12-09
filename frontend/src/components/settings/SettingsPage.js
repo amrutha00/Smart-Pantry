@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Alert from '@mui/material/Alert';
-import backgroundImage from '../../assets/settings.jpg';
+import backgroundImage from '../../assets/settings-micro.jpg';
 
 function SettingsPage() {
   const history = useHistory();
