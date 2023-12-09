@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import Typography from "@mui/material/Typography";
 import Alert from '@mui/material/Alert';
 import backgroundImage from '../../assets/settings-micro.jpg';
+import {CircularProgress} from '@mui/material';
 
 function SettingsPage() {
   const history = useHistory();
@@ -19,30 +20,30 @@ function SettingsPage() {
   const [editedName, setEditedName] = useState('');
   const [editedTimezone, setEditedTimezone] = useState('');
   const [saveStatus, setSaveStatus] = useState({ success: false, error: false, message: '' });
-
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Listen for changes in authentication state
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
       if (authUser) {
-        // User is signed in
         setUser(authUser);
         fetchUserData(authUser);
       } else {
-        // No user is signed in, redirect to sign-in page
         history.push("/sign-in");
       }
     });
-
     return () => {
-      // Unsubscribe from the listener when the component unmounts
       unsubscribe();
     };
   }, [history]);
 
-  // Fetch user data using the provided access token
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   const fetchUserData = async (authUser) => {
+    setIsLoading(true);
     try {
+      await sleep(2000);
       const endpoint = process.env.REACT_APP_BACKEND_API + "/user";
       const response = await fetch(endpoint, {
         method: "GET",
@@ -52,13 +53,14 @@ function SettingsPage() {
       });
       const data = await response.json();
       setUserData(data.data);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error("Error fetching user data:", error);
     }
   };
 
   useEffect(() => {
-    // Fetch the timezones
     const endpoint = process.env.REACT_APP_BACKEND_API + "/timezone";
     fetch(endpoint)
       .then(response => response.json())
@@ -84,7 +86,6 @@ function SettingsPage() {
       if (!response.ok) {
         throw new Error('Failed to update user details');
       }
-      // Fetch updated user data
       fetchUserData(user);
       setSaveStatus({ success: true, error: false, message: 'User details updated successfully' });
     } catch (error) {
@@ -93,9 +94,46 @@ function SettingsPage() {
     }
   };
 
-  if (!user || !userData) {
-    return null; // Render nothing until user is authenticated and user data is fetched
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          bgcolor: 'black',
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+        }}
+      >
+        <CircularProgress sx={{ ml:  25 }}/>
+      </Box>
+    );
   }
+
+  if (!user || !userData) {
+    return (
+      <Box 
+        sx={{ 
+          bgcolor: 'black',
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          minHeight: '100vh',
+          pl: 25
+        }}
+    
+      ></Box>
+    )
+  }
+
 
   return (
     <Box 
@@ -111,7 +149,6 @@ function SettingsPage() {
           minHeight: '100vh',
           pl: 25
         }}
-    
     >
       <Card sx={{ minWidth: "100vh", ml:  25 }}>
         <CardContent>
@@ -129,7 +166,7 @@ function SettingsPage() {
             }}
           />
           <TextField
-            disabled
+           disabled
             label="Name"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
@@ -158,8 +195,8 @@ function SettingsPage() {
           {saveStatus.success && <Alert severity="success" sx={{ mt: 2 }}>{saveStatus.message}</Alert>}
           {saveStatus.error && <Alert severity="error" sx={{ mt: 2 }}>{saveStatus.message}</Alert>}
 
-        </CardContent>
-      </Card>
+      </CardContent>
+    </Card>
     </Box>
   );
 }

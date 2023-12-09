@@ -245,7 +245,7 @@ function Discover() {
     const filteredItems = foodItems.filter(item => item.NumberOfDaysToExpire <= days && item.NumberOfDaysToExpire>0);
     filteredItems.sort((a, b) => a.NumberOfDaysToExpire - b.NumberOfDaysToExpire);
     setDisplayItems(filteredItems);
-    setListVisible(true); // Set the list as visible
+    setListVisible(true);
     setCurrentSelection(days === 2 ? 'expire in 2 days' : 'expire in one week');
     setShowDeleteButton(false);
     setShowRecipes(false);
@@ -578,12 +578,10 @@ function Discover() {
                   </TableBody>
                 </Table>
             </TableContainer>
-          </Box>
+            </Box>
         </StyledPaper>
           
-
-
-        )}
+      )}
 
       {showRecipes && (
         <>
