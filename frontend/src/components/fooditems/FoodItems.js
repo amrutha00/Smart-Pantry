@@ -39,11 +39,10 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
   
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
-    backgroundColor: theme.palette.text.disabled,
     '& th': {
       color: theme.palette.primary.contrastText,
       fontWeight: 'bold',
-      fontSize: '1.2rem',
+      fontSize: '1.1rem',
     },
   
 }));
@@ -293,209 +292,209 @@ function FoodItems() {
       }} 
     >
 
-    <StyledPaper style={{ margin: 20, padding: 20 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <SearchField
-            id="search-food"
-            label="Search for food"
-            variant="outlined"
-            style={{ margin: 20 }}
-            onChange={handleSearchChange}
-            InputProps={{
-              endAdornment: (
-                <Button position="end">
-                  <SearchIcon />
-                </Button>
-              ),
-            }}
-          />
-
-            <div>
-            <StyledAddButton 
-              variant="contained" 
-              sx={{ 
-                backgroundColor: 'green',
-                '&:hover': {
-                  backgroundColor: 'darkgreen',
-                },
-                margin: 2
+      <StyledPaper style={{ margin: 20, padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <SearchField
+              id="search-food"
+              label="Search for food"
+              variant="outlined"
+              style={{ margin: 20 }}
+              onChange={handleSearchChange}
+              InputProps={{
+                endAdornment: (
+                  <Button position="end">
+                    <SearchIcon />
+                  </Button>
+                ),
               }}
-              onClick={handleOpenAddItemDialog}
-            >
-              Add Item
-            </StyledAddButton>
+            />
 
-
+              <div>
               <StyledAddButton 
-                      variant="contained" 
-                      sx={{ 
-                        backgroundColor: 'error.main',
-                        '&:hover': {
-                          backgroundColor: 'error.dark',
-                        },
-                        margin: 2
-                      }}
-                      onClick={handleDeleteAllExpired}
-                    >
-                      Delete all expired items
+                variant="contained" 
+                sx={{ 
+                  backgroundColor: 'green',
+                  '&:hover': {
+                    backgroundColor: 'darkgreen',
+                  },
+                  margin: 2
+                }}
+                onClick={handleOpenAddItemDialog}
+              >
+                Add Item
               </StyledAddButton>
-            </div>
-      </div>
-      <TableContainer component={Paper}>
-        <Table aria-label="food items table">
-          <StyledTableHead>
-            <TableRow>
-              <TableCell>Food Item</TableCell>
-              <TableCell>Item</TableCell>
-              <TableCell>Is Expired</TableCell>
-              <TableCell >Purchase Date</TableCell>
-              <TableCell onClick={handleSortByExpiryDate} style={{ cursor: 'pointer' }}>
-                Expiry Date
-                {sortDirection === "asc" ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
-              </TableCell>
-              <TableCell >Expiry Days</TableCell>
-              <TableCell >Qty</TableCell>
-              <TableCell ></TableCell>
-              <TableCell ></TableCell>
-            </TableRow>
-          </StyledTableHead>
-          <TableBody>
-            {items.filter((item) => item.name.toLowerCase().includes(searchTerm))
-            .sort((a, b) => {
-              const dateA = new Date(a.expiryDate);
-              const dateB = new Date(b.expiryDate);
-              return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
-            })
-            .map((item) => (
-              <TableRow key={item._id}>
-                <TableCell>
-                  {item.imageUrl && (
-                    <CardMedia
-                      component="img"
-                      style={{
-                        width: '50px',
-                        height: '50px',
-                        borderRadius: '50%',
-                      }}
-                      image={item.imageUrl}
-                      alt={item.name}
-                    />
-                  )}
-                </TableCell>
-                <TableCell >{item.name}</TableCell>
-                <TableCell >{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                <TableCell >{new Date(item.boughtDate).toDateString()}</TableCell>
-                <TableCell >{new Date(item.expiryDate).toDateString()}</TableCell>
-                <TableCell align="center">{item.NumberOfDaysToExpire}</TableCell>
-                <TableCell >{item.quantity}</TableCell>
-                <TableCell >
-                  <ActionButton onClick={() => deleteItem(item._id, user)}>
-                    <StyledDeleteIcon />
-                  </ActionButton>
-                </TableCell>
-                <TableCell >
-                  <ActionButton onClick={() => handleEditItem(item)}>
-                      <EditIcon />
-                  </ActionButton>
-                </TableCell>
 
+
+                <StyledAddButton 
+                        variant="contained" 
+                        sx={{ 
+                          backgroundColor: 'error.main',
+                          '&:hover': {
+                            backgroundColor: 'error.dark',
+                          },
+                          margin: 2
+                        }}
+                        onClick={handleDeleteAllExpired}
+                      >
+                        Delete all expired items
+                </StyledAddButton>
+              </div>
+        </div>
+        <TableContainer component={Paper}>
+          <Table aria-label="food items table">
+            <StyledTableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell>Item</TableCell>
+                <TableCell>Expired?</TableCell>
+                <TableCell >Purchase Date</TableCell>
+                <TableCell onClick={handleSortByExpiryDate} style={{ cursor: 'pointer' }}>
+                  Expiry Date
+                  {sortDirection === "asc" ? <ArrowDownwardIcon sx={{ fontSize: 20, color: 'white' }}/> : <ArrowUpwardIcon />}
+                </TableCell>
+                <TableCell >Expires In (days)</TableCell>
+                <TableCell >Qty</TableCell>
+                <TableCell ></TableCell>
+                <TableCell ></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </StyledTableHead>
+            <TableBody>
+              {items.filter((item) => item.name.toLowerCase().includes(searchTerm))
+              .sort((a, b) => {
+                const dateA = new Date(a.expiryDate);
+                const dateB = new Date(b.expiryDate);
+                return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+              })
+              .map((item) => (
+                <TableRow key={item._id}>
+                  <TableCell>
+                    {item.imageUrl && (
+                      <CardMedia
+                        component="img"
+                        style={{
+                          width: '50px',
+                          height: '50px',
+                          borderRadius: '50%',
+                        }}
+                        image={item.imageUrl}
+                        alt={item.name}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell >{item.name}</TableCell>
+                  <TableCell >{item.isExpired ? 'Yes' : 'No'}</TableCell>
+                  <TableCell >{new Date(item.boughtDate).toDateString()}</TableCell>
+                  <TableCell >{new Date(item.expiryDate).toDateString()}</TableCell>
+                  <TableCell align="center">{item.NumberOfDaysToExpire}</TableCell>
+                  <TableCell >{item.quantity}</TableCell>
+                  <TableCell >
+                    <ActionButton onClick={() => deleteItem(item._id, user)}>
+                      <StyledDeleteIcon />
+                    </ActionButton>
+                  </TableCell>
+                  <TableCell >
+                    <ActionButton onClick={() => handleEditItem(item)}>
+                        <EditIcon />
+                    </ActionButton>
+                  </TableCell>
 
-      {/* Add Item Dialog */}
-      <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
-        <DialogTitle>Add New Food Item</DialogTitle>
-        <DialogContent>
-          <SearchField
-            label="Name"
-            fullWidth
-            margin="normal"
-            onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-          />
-          <SearchField
-            label="Quantity"
-            fullWidth
-            margin="normal"
-            onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-          
-    <DatePicker
-      label="Purchase Date"
-      value={newItem.boughtDate}
-      onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
-      renderInput={(params) => <TextField {...params} margin="normal" />}
-    />
-    
-    <DatePicker
-      label="Expiry Date"
-      value={newItem.expiryDate}
-      onChange={(date) => {
-          setNewItem({ ...newItem, expiryDate: date });
-          setexpiryError(false); // Set expiryError to false
-          setexpiryError2(false); // Set expiryError2 to false
-        }}
-      renderInput={(params) => <TextField {...params} margin="normal" />}
-    />
-  </LocalizationProvider>
-  {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
-  {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseAddItemDialog} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddItem} color="primary">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      {/* Dialog for edit */}
-      <Dialog open={openEditItemDialog} onClose={handleCloseEditItemDialog}>
-        <DialogTitle>Edit Food Item</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="Name"
-            fullWidth
-            margin="normal"
-            value={editedItem.name}
-            onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
-          />
-          <TextField
-            label="Quantity"
-            fullWidth
-            margin="normal"
-            value={editedItem.quantity}
-            onChange={(e) => setEditedItem({ ...editedItem, quantity: e.target.value })}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Purchase Date"
-              onChange={(date) => setEditedItem({ ...editedItem, boughtDate: date })}
-              renderInput={(params) => <TextField {...params} margin="normal" />}
+        {/* Add Item Dialog */}
+        <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
+          <DialogTitle>Add New Food Item</DialogTitle>
+          <DialogContent>
+            <SearchField
+              label="Name"
+              fullWidth
+              margin="normal"
+              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             />
-            <DatePicker
-              label="Expiry Date"
-              onChange={(date) => setEditedItem({ ...editedItem, expiryDate: date })}
-              renderInput={(params) => <TextField {...params} margin="normal" />}
+            <SearchField
+              label="Quantity"
+              fullWidth
+              margin="normal"
+              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
             />
-          </LocalizationProvider>
-          {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
-          {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEditItemDialog}>Cancel</Button>
-          <Button onClick={handleUpdateItem} color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            
+      <DatePicker
+        label="Purchase Date"
+        value={newItem.boughtDate}
+        onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+      
+      <DatePicker
+        label="Expiry Date"
+        value={newItem.expiryDate}
+        onChange={(date) => {
+            setNewItem({ ...newItem, expiryDate: date });
+            setexpiryError(false); // Set expiryError to false
+            setexpiryError2(false); // Set expiryError2 to false
+          }}
+        renderInput={(params) => <TextField {...params} margin="normal" />}
+      />
+    </LocalizationProvider>
+    {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+    {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseAddItemDialog} color="secondary">
+              Cancel
+            </Button>
+            <Button onClick={handleAddItem} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
 
-    </StyledPaper>
+        {/* Dialog for edit */}
+        <Dialog open={openEditItemDialog} onClose={handleCloseEditItemDialog}>
+          <DialogTitle>Edit Food Item</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Name"
+              fullWidth
+              margin="normal"
+              value={editedItem.name}
+              onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+            />
+            <TextField
+              label="Quantity"
+              fullWidth
+              margin="normal"
+              value={editedItem.quantity}
+              onChange={(e) => setEditedItem({ ...editedItem, quantity: e.target.value })}
+            />
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Purchase Date"
+                onChange={(date) => setEditedItem({ ...editedItem, boughtDate: date })}
+                renderInput={(params) => <TextField {...params} margin="normal" />}
+              />
+              <DatePicker
+                label="Expiry Date"
+                onChange={(date) => setEditedItem({ ...editedItem, expiryDate: date })}
+                renderInput={(params) => <TextField {...params} margin="normal" />}
+              />
+            </LocalizationProvider>
+            {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+            {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseEditItemDialog}>Cancel</Button>
+            <Button onClick={handleUpdateItem} color="primary">
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+      </StyledPaper>
 
     </Box>
   );
