@@ -14,7 +14,7 @@ function Home() {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
       if (authUser) {
         setUser(authUser);
-        fetchUserData(authUser);
+        // fetchUserData(authUser);
       } else {
         history.push('/sign-in');
       }
@@ -41,11 +41,13 @@ function Home() {
     }
   };
 
-  if (!user || !userData) {
-    return null;
-  }
+  // if (!user || !userData) {
+  //   return null;
+  // }
 
-  const welcomeMessage = `Welcome home ${userData.name} !`;
+  // const welcomeMessage = `Welcome home ${userData.name} !`;
+
+  const welcomeMessage = `Welcome Home!`;
 
   const navigateTo = (path) => {
     history.push(path);
