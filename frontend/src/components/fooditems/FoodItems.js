@@ -79,15 +79,6 @@ function FoodItems() {
   const [expiryerror2, setexpiryError2] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
-  const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
-  const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
-  const [editedItem, setEditedItem] = useState({ ...newItem });
-  const [newItem, setNewItem] = useState({
-    name: '',
-    quantity: '',
-    boughtDate: null, // Initialize with null or a default date
-    expiryDate: null,   // Initialize with null or a default date
-  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -101,23 +92,22 @@ function FoodItems() {
     return () => {
       unsubscribe();
     };
-  }, [history]);  
+  }, [history]);
 
-  const fetchItems = async (authUser) => {
-    try {
-      const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-      });
-      const data = await response.json();
-      setItems(data.data);
-    } catch (error) {
-      console.error("Error fetching items data:", error);
-    }
-  };
+  // State for the add item dialog
+  const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
+  
+
+  const [newItem, setNewItem] = useState({
+    name: '',
+    quantity: '',
+    boughtDate: null, // Initialize with null or a default date
+    expiryDate: null,   // Initialize with null or a default date
+  });
+  
+  // State for the edit item dialog
+  const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
+  const [editedItem, setEditedItem] = useState({ ...newItem });
 
   const handleOpenAddItemDialog = () => {
     setOpenAddItemDialog(true);
@@ -202,6 +192,23 @@ function FoodItems() {
     }
   };
 
+  const fetchItems = async (authUser) => {
+    try {
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setItems(data.data);
+    } catch (error) {
+      console.error("Error fetching items data:", error);
+    }
+  };
+
+  //for update items
 
   const handleEditItem = (itemToEdit) => {
     setEditedItem({ ...itemToEdit });
