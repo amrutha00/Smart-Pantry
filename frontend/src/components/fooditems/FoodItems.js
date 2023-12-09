@@ -27,6 +27,7 @@ import Box from '@mui/material/Box';
 import { useHistory } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { styled } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: theme.spacing(3),
@@ -60,11 +61,17 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
     },
   }));
 
+  const StyledDeleteIcon = styled(DeleteIcon)({
+    color: '#ff6666',
+  });
+
 function FoodItems() {
   const history = useHistory();
   const [user, setUser] = useState(null);
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  const [expiryerror, setexpiryError] = useState(false);
+  const [expiryerror2, setexpiryError2] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -86,6 +93,7 @@ function FoodItems() {
 
   const [newItem, setNewItem] = useState({
     name: '',
+    quantity: '',
     boughtDate: null, // Initialize with null or a default date
     expiryDate: null,   // Initialize with null or a default date
   });
@@ -104,9 +112,26 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
 
   const handleAddItem = async () => {
     addItems(user);
+   
   };
 
   const addItems = async (authUser) => {
+    const currentDate = new Date().toLocaleString();
+    const expiryDate = new Date(newItem.expiryDate).toLocaleString();
+    const boughtDate = new Date(newItem.boughtDate).toLocaleString();
+    // Check if the expiryDate is greater than or equal to the current date
+    if (expiryDate < currentDate) {
+    setexpiryError(true);
+    console.log("set expiry error");
+      return; // Exit the function without making the API call
+    }
+
+    if (expiryDate <= boughtDate) {
+        setexpiryError2(true);
+        console.log("set expiry error2");
+          return; // Exit the function without making the API call
+        }
+
     try {
         const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
       const response = await fetch(endpoint, {
@@ -237,11 +262,12 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                 <TableCell>Food Item</TableCell>
                 <TableCell>Item</TableCell>
                 <TableCell>Is Expired</TableCell>
-                <TableCell align="right">Purchase Date</TableCell>
-                <TableCell align="right">Expiry Date</TableCell>
-                <TableCell align="right">Days To Expire</TableCell>
-                <TableCell align="right"></TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell >Purchase Date</TableCell>
+                <TableCell >Expiry Date</TableCell>
+                <TableCell >Expiry Days</TableCell>
+                <TableCell >Qty</TableCell>
+                <TableCell ></TableCell>
+                <TableCell ></TableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>
@@ -261,17 +287,18 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                       />
                     )}
                   </TableCell>
-                  <TableCell align="center">{item.name}</TableCell>
-                  <TableCell align="center">{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                  <TableCell align="right">{new Date(item.boughtDate).toDateString()}</TableCell>
-                  <TableCell align="right">{new Date(item.expiryDate).toDateString()}</TableCell>
-                  <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
-                  <TableCell align="right">
+                  <TableCell >{item.name}</TableCell>
+                  <TableCell >{item.isExpired ? 'Yes' : 'No'}</TableCell>
+                  <TableCell >{new Date(item.boughtDate).toDateString()}</TableCell>
+                  <TableCell >{new Date(item.expiryDate).toDateString()}</TableCell>
+                  <TableCell align="center">{item.NumberOfDaysToExpire}</TableCell>
+                  <TableCell >{item.quantity}</TableCell>
+                  <TableCell >
                     <ActionButton onClick={() => deleteItem(item._id, user)}>
-                      <DeleteIcon />
+                      <StyledDeleteIcon />
                     </ActionButton>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell >
                     <ActionButton onClick={() => handleEditItem(item)}>
                         <EditIcon />
                     </ActionButton>
@@ -293,6 +320,12 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
               margin="normal"
               onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
             />
+            <SearchField
+              label="Quantity"
+              fullWidth
+              margin="normal"
+              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+            />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
             
       <DatePicker
@@ -305,10 +338,16 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
       <DatePicker
         label="Expiry Date"
         value={newItem.expiryDate}
-        onChange={(date) => setNewItem({ ...newItem, expiryDate: date })}
+        onChange={(date) => {
+            setNewItem({ ...newItem, expiryDate: date });
+            setexpiryError(false); // Set expiryError to false
+            setexpiryError2(false); // Set expiryError2 to false
+          }}
         renderInput={(params) => <TextField {...params} margin="normal" />}
       />
     </LocalizationProvider>
+    {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+    {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseAddItemDialog} color="secondary">
@@ -331,6 +370,13 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
       value={editedItem.name}
       onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
     />
+    <TextField
+      label="Quantity"
+      fullWidth
+      margin="normal"
+      value={editedItem.quantity}
+      onChange={(e) => setEditedItem({ ...editedItem, quantity: e.target.value })}
+    />
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
         label="Purchase Date"
@@ -343,6 +389,8 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
         renderInput={(params) => <TextField {...params} margin="normal" />}
       />
     </LocalizationProvider>
+    {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+    {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
   </DialogContent>
   <DialogActions>
     <Button onClick={handleCloseEditItemDialog}>Cancel</Button>
