@@ -36,14 +36,9 @@ function SettingsPage() {
     };
   }, [history]);
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   const fetchUserData = async (authUser) => {
     setIsLoading(true);
     try {
-      await sleep(2000);
       const endpoint = process.env.REACT_APP_BACKEND_API + "/user";
       const response = await fetch(endpoint, {
         method: "GET",
