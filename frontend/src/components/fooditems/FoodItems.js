@@ -77,6 +77,7 @@ function FoodItems() {
   const [error, setError] = useState(null);
   const [expiryerror, setexpiryError] = useState(false);
   const [expiryerror2, setexpiryError2] = useState(false);
+  const [expiryerror3, setexpiryError3] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
 
@@ -159,17 +160,28 @@ function FoodItems() {
   };
 
   const addItems = async (authUser) => {
+    const { name, quantity, boughtDate, expiryDate } = newItem;
+
+    if (!name || !quantity || !boughtDate || !expiryDate) {
+      console.log("New item fields are empty");
+      setexpiryError3(true);
+      return;
+    }
+    else {
+      setexpiryError3(false);
+    }
+
     const currentDate = new Date();
-    const expiryDate = new Date(newItem.expiryDate);
-    const boughtDate = new Date(newItem.boughtDate);
+    const expiry = new Date(expiryDate);
+    const bought = new Date(boughtDate);
     // Check if the expiryDate is greater than or equal to the current date
-    if (expiryDate.getTime() < currentDate.getTime()) {
+    if (expiry.getTime() < currentDate.getTime()) {
         setexpiryError(true);
         console.log("Item already expired error");
         return;
     }
 
-    if (expiryDate.getTime() <= boughtDate.getTime()) {
+    if (expiry.getTime() <= bought.getTime()) {
         setexpiryError2(true);
         console.log("Expiry date is before purchase date error");
         return; 
@@ -413,13 +425,19 @@ function FoodItems() {
               label="Name"
               fullWidth
               margin="normal"
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+              onChange={(e) => {
+                setNewItem({ ...newItem, name: e.target.value });
+                setexpiryError3(false);
+              }}
             />
             <SearchField
               label="Quantity"
               fullWidth
               margin="normal"
-              onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
+              onChange={(e) => {
+                setNewItem({ ...newItem, quantity: e.target.value })
+                setexpiryError3(false);
+              }}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -427,6 +445,7 @@ function FoodItems() {
                   onChange={(date) => {
                     setNewItem({ ...newItem, boughtDate: date });
                     setexpiryError2(false);
+                    setexpiryError3(false);
                   }}
                   renderInput={(params) => <TextField {...params} margin="normal" />}
                 />
@@ -437,12 +456,15 @@ function FoodItems() {
                       setNewItem({ ...newItem, expiryDate: date });
                       setexpiryError(false);
                       setexpiryError2(false);
+                      setexpiryError3(false);
                     }}
                   renderInput={(params) => <TextField {...params} margin="normal" />}
                 />
             </LocalizationProvider>
             {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
             {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
+            {expiryerror3 && <Alert severity="error"> Enter all the details to add</Alert>}
+
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseAddItemDialog} color="secondary">
