@@ -3,6 +3,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  CircularProgress,
   TableContainer,
   TableHead,
   TableRow,
@@ -82,6 +83,10 @@ function FoodItems() {
   const [expiryerror3, setexpiryError3] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortDirection, setSortDirection] = useState("asc");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -98,18 +103,23 @@ function FoodItems() {
   }, [history]);
 
   const fetchItems = async (authUser) => {
+    setIsLoading(true);
+    setItems([]);
     try {
         const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-      });
-      const data = await response.json();
-      setItems(data.data);
+        const response = await fetch(endpoint, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authUser.accessToken}`,
+          },
+        });
+        const data = await response.json();
+        setItems(data.data);
+        setIsLoading(false);
     } catch (error) {
-      console.error("Error fetching items data:", error);
+        console.error("Error fetching items data:", error);
+    } finally {
+        setIsLoading(false); // Stop loading regardless of outcome
     }
   };
 
@@ -149,92 +159,17 @@ function FoodItems() {
     })
   };
 
-  const handleCloseEditItemDialog = () => {
-    setOpenEditItemDialog(false);
-    setexpiryError(false);
-    setexpiryError2(false);
-    setexpiryError3(false);
-    setEditedItem({
-      name: '',
-      quantity: '',
-      boughtDate: null,
-      expiryDate: null,
-    })
-  };
-
   const handleAddItem = async () => {
     addItems(user);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value.toLowerCase());
-  };
-  
-  const handleSortByExpiryDate = () => {
-    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    const sortedItems = [...items].sort((a, b) => {
-      const dateA = new Date(a.expiryDate);
-      const dateB = new Date(b.expiryDate);
-      return sortDirection === "asc" ? dateB - dateA : dateA - dateB;
-    });
-    setItems(sortedItems);
-  };
-
   const addItems = async (authUser) => {
-    const { name, quantity, boughtDate, expiryDate } = newItem;
-
-    if (!name || !quantity || !boughtDate || !expiryDate) {
-      console.log("New item fields are empty");
-      setexpiryError3(true);
-      return;
-    }
-    else {
-      setexpiryError3(false);
-    }
-
-    const currentDate = new Date();
-    const expiry = new Date(expiryDate);
-    const bought = new Date(boughtDate);
-    // Check if the expiryDate is greater than or equal to the current date
-    if (expiry.getTime() < currentDate.getTime()) {
-        setexpiryError(true);
-        console.log("Item already expired error");
-        return;
-    }
-
-    if (expiry.getTime() <= bought.getTime()) {
-        setexpiryError2(true);
-        console.log("Expiry date is before purchase date error");
-        return; 
-    }
-
+    setIsAdding(true);
     try {
-      const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authUser.accessToken}`
-        },
-        body: JSON.stringify(newItem)
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add new item');
-      }
-      handleCloseAddItemDialog();
-      fetchItems(authUser);
-    } catch (error) {
-      console.error("Error adding new item:", error);
-    }
-  };
-
-  const updateItem = async (authUser) => {
-    try {
-
-      const { name, quantity, boughtDate, expiryDate } = editedItem;
+      const { name, quantity, boughtDate, expiryDate } = newItem;
 
       if (!name || !quantity || !boughtDate || !expiryDate) {
-        console.log("Fields are empty");
+        console.log("New item fields are empty");
         setexpiryError3(true);
         return;
       }
@@ -252,11 +187,88 @@ function FoodItems() {
           return;
       }
 
-    if (expiry.getTime() <= bought.getTime()) {
-        setexpiryError2(true);
-        console.log("Expiry date is before purchase date error");
-        return; 
+      if (expiry.getTime() <= bought.getTime()) {
+          setexpiryError2(true);
+          console.log("Expiry date is before purchase date error");
+          return; 
+      }
+
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authUser.accessToken}`
+        },
+        body: JSON.stringify(newItem)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to add new item');
+      }
+      setIsAdding(false);
+      handleCloseAddItemDialog();
+      fetchItems(authUser);
+    } catch (error) {
+      console.error("Error adding new item:", error);
+    } finally {
+      setIsAdding(false);
     }
+  };
+
+  const handleCloseEditItemDialog = () => {
+    setOpenEditItemDialog(false);
+    setexpiryError(false);
+    setexpiryError2(false);
+    setexpiryError3(false);
+    setEditedItem({
+      name: '',
+      quantity: '',
+      boughtDate: null,
+      expiryDate: null,
+    })
+  };
+
+  const handleEditItem = (itemToEdit) => {
+    const editedItemWithDayjs = {
+      ...itemToEdit,
+      boughtDate: itemToEdit.boughtDate ? dayjs(itemToEdit.boughtDate) : null,
+      expiryDate: itemToEdit.expiryDate ? dayjs(itemToEdit.expiryDate) : null,
+    };
+    setEditedItem(editedItemWithDayjs);
+    setOpenEditItemDialog(true);
+  };
+
+  const handleUpdateItem = async () => {
+    updateItem(user);
+  };
+
+  const updateItem = async (authUser) => {
+    setIsEditing(true);
+    try {
+      const { name, quantity, boughtDate, expiryDate } = editedItem;
+      if (!name || !quantity || !boughtDate || !expiryDate) {
+        console.log("Fields are empty");
+        setexpiryError3(true);
+        return;
+      }
+      else {
+        setexpiryError3(false);
+      }
+      const currentDate = new Date();
+      const expiry = new Date(expiryDate);
+      const bought = new Date(boughtDate);
+      // Check if the expiryDate is greater than or equal to the current date
+      if (expiry.getTime() < currentDate.getTime()) {
+          setexpiryError(true);
+          console.log("Item already expired error");
+          return;
+      }
+
+      if (expiry.getTime() <= bought.getTime()) {
+          setexpiryError2(true);
+          console.log("Expiry date is before purchase date error");
+          return; 
+      }
 
       const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
       const response = await fetch(endpoint, {
@@ -271,12 +283,29 @@ function FoodItems() {
       if (!response.ok) {
         throw new Error('Failed to update item');
       }
-  
-      fetchItems(authUser);
+      setIsEditing(false);
       handleCloseEditItemDialog();
+      fetchItems(authUser);
     } catch (error) {
       console.error('Error updating item:', error);
+    } finally {
+      setIsEditing(false);
     }
+  };
+
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+  
+  const handleSortByExpiryDate = () => {
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    const sortedItems = [...items].sort((a, b) => {
+      const dateA = new Date(a.expiryDate);
+      const dateB = new Date(b.expiryDate);
+      return sortDirection === "asc" ? dateB - dateA : dateA - dateB;
+    });
+    setItems(sortedItems);
   };
 
 
@@ -298,20 +327,6 @@ function FoodItems() {
     }
   };
 
-  const handleEditItem = (itemToEdit) => {
-    const editedItemWithDayjs = {
-      ...itemToEdit,
-      boughtDate: itemToEdit.boughtDate ? dayjs(itemToEdit.boughtDate) : null,
-      expiryDate: itemToEdit.expiryDate ? dayjs(itemToEdit.expiryDate) : null,
-    };
-    setEditedItem(editedItemWithDayjs);
-    setOpenEditItemDialog(true);
-  };
-  
-  
-  const handleUpdateItem = async () => {
-    updateItem(user);
-  };
   
   const handleDeleteAllExpired = async () => {
     try {
@@ -401,6 +416,11 @@ function FoodItems() {
               </StyledAddButton>
             </div>
         </div>
+
+        {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <CircularProgress />
+        </Box>)}
         
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
@@ -510,6 +530,19 @@ function FoodItems() {
                   renderInput={(params) => <TextField {...params} margin="normal" />}
                 />
             </LocalizationProvider>
+
+            {isAdding && 
+              <Box sx={{ position: 'relative' , margin: 5}}>
+                <CircularProgress size={24} sx={{ 
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    marginTop: '-12px', 
+                    marginLeft: '-12px' 
+                }} />
+              </Box>
+            }
+
             {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
             {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
             {expiryerror3 && <Alert severity="error"> Enter all the details to add</Alert>}
@@ -572,6 +605,19 @@ function FoodItems() {
                 renderInput={(params) => <TextField {...params} margin="normal" />}
               />
             </LocalizationProvider>
+
+            {isEditing && 
+              <Box sx={{ position: 'relative' , margin: 5}}>
+                <CircularProgress size={24} sx={{ 
+                    position: 'absolute', 
+                    top: '50%', 
+                    left: '50%', 
+                    marginTop: '-12px', 
+                    marginLeft: '-12px' 
+                }} />
+              </Box>
+            }
+
             {expiryerror && <Alert severity="error">Item Already Expired. Delete the item.</Alert>}
             {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
             {expiryerror3 && <Alert severity="error"> Enter all the details to add</Alert>}
