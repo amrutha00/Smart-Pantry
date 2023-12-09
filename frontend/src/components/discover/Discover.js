@@ -20,7 +20,23 @@ import {
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import backgroundImg from '../../assets/discover.jpg';
+import { styled } from '@mui/material/styles';
 
+const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  '& th': {
+    color: theme.palette.primary.contrastText,
+    fontWeight: 'bold',
+    fontSize: '1.1rem',
+  },
+
+}));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  margin: theme.spacing(3),
+  padding: theme.spacing(3),
+  background: theme.palette.background.default
+
+}));
 
 function Discover() {
   const history = useHistory();
@@ -338,7 +354,8 @@ function Discover() {
       </Grid>
 
       {listVisible && (
-          <Box sx={{ mt: 4 }}>
+        <StyledPaper style={{ margin: 10, padding: 20 }}>
+            <Box sx={{ mt: 4 }}>
             {showDeleteButton && (
                 <Button 
                   variant="contained" 
@@ -362,57 +379,53 @@ function Discover() {
             </Typography>
             <TableContainer component={Paper}>
                 <Table aria-label="food items table">
-                    <TableHead>
+                  <StyledTableHead>
                     <TableRow>
-                        <TableCell>Food Item</TableCell>
-                        <TableCell>Item</TableCell>
-                        <TableCell>Is Expired</TableCell>
-                        <TableCell align="right">Purchase Date</TableCell>
-                        <TableCell align="right">Expiry Date</TableCell>
-                        <TableCell align="right">Days To Expire</TableCell>
-                        <TableCell align="right"></TableCell>
-                        <TableCell align="right"></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>Item</TableCell>
+                      <TableCell>Expired?</TableCell>
+                      <TableCell >Purchase Date</TableCell>
+                      <TableCell>
+                        Expiry Date
+                      </TableCell>
+                      <TableCell >Expires In (days)</TableCell>
+                      <TableCell >Qty</TableCell>
                     </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {displayItems.map((item) => (
-                        <TableRow key={item._id}>
+                  </StyledTableHead>
+                  <TableBody>
+                    {displayItems
+                    .map((item) => (
+                      <TableRow key={item._id}>
                         <TableCell>
-                            {item.imageUrl && (
+                          {item.imageUrl && (
                             <CardMedia
-                                component="img"
-                                style={{
+                              component="img"
+                              style={{
                                 width: '50px',
                                 height: '50px',
                                 borderRadius: '50%',
-                                }}
-                                image={item.imageUrl}
-                                alt={item.name}
+                              }}
+                              image={item.imageUrl}
+                              alt={item.name}
                             />
-                            )}
+                          )}
                         </TableCell>
-                        <TableCell align="center">{item.name}</TableCell>
-                        <TableCell align="center">{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="right">{new Date(item.boughtDate).toDateString()}</TableCell>
-                        <TableCell align="right">{new Date(item.expiryDate).toDateString()}</TableCell>
-                        <TableCell align="right">{item.NumberOfDaysToExpire}</TableCell>
-                        {/* <TableCell align="right">
-                            <IconButton onClick={() => deleteItem(item._id, user)}>
-                            <DeleteIcon />
-                            </IconButton>
-                        </TableCell>
-                        <TableCell align="right">
-                            <IconButton onClick={() => handleEditItem(item)}>
-                                <EditIcon />
-                            </IconButton>
-                        </TableCell> */}
-        
-                        </TableRow>
+                        <TableCell >{item.name}</TableCell>
+                        <TableCell >{item.isExpired ? 'Yes' : 'No'}</TableCell>
+                        <TableCell >{new Date(item.boughtDate).toDateString()}</TableCell>
+                        <TableCell >{new Date(item.expiryDate).toDateString()}</TableCell>
+                        <TableCell align="center">{item.NumberOfDaysToExpire}</TableCell>
+                        <TableCell >{item.quantity}</TableCell>
+                      </TableRow>
                     ))}
-                    </TableBody>
+                  </TableBody>
                 </Table>
             </TableContainer>
           </Box>
+        </StyledPaper>
+          
+
+
         )}
 
       {showRecipes && (
