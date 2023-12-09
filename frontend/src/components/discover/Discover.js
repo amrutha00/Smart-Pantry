@@ -20,6 +20,8 @@ import {
     CardMedia
   } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import backgroundImg from '../../assets/discover.jpg';
+
 
 function Discover() {
   const history = useHistory();
@@ -140,13 +142,24 @@ function Discover() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, p: 10 }} bgcolor="grey">
+    <Box 
+      sx={{ 
+        flexGrow: 1, 
+        p: 10, 
+        backgroundImage: `url(${backgroundImg})`,
+        backgroundSize: 'cover',     // Cover the entire space of the box
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+        minHeight: '100vh'           // Ensure it covers the whole viewport height
+      }} 
+      bgcolor="grey"
+    >
       <Grid container spacing={2} justifyContent="center">
           <Grid item>
               <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <CardActionArea onClick={handleExpiredBoxClick} sx={{ textAlign: 'center' }}>
                   <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
-                    Items already expired
+                    Food already expired
                   </Typography>
                   <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
                 </CardActionArea>
@@ -202,7 +215,7 @@ function Discover() {
                   mb: 2,
                   fontFamily: 'Arial', // Example: Change to the font family you prefer
                   fontSize: '1.2rem',  // Adjust the font size as needed
-                  color: 'black'        // Change to the color you want
+                  color: 'white'        // Change to the color you want
                 }}
             >
               {`${displayItems.length} items ${currentSelection}`}
@@ -271,7 +284,8 @@ function Discover() {
                 mb: 2, 
                 textAlign: 'center',
                 fontWeight: 'bold',
-                fontFamily: 'Arial' 
+                fontFamily: 'Arial',
+                color: 'white' 
               }}
             >
               These are the recipes you can cook with the food expiring in one week
