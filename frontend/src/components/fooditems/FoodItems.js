@@ -28,6 +28,8 @@ import { useHistory } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { styled } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: theme.spacing(3),
@@ -72,6 +74,8 @@ function FoodItems() {
   const [error, setError] = useState(null);
   const [expiryerror, setexpiryError] = useState(false);
   const [expiryerror2, setexpiryError2] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -114,6 +118,21 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
     addItems(user);
    
   };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value.toLowerCase());
+  };
+  
+  const handleSortByExpiryDate = () => {
+    setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    const sortedItems = [...items].sort((a, b) => {
+      const dateA = new Date(a.expiryDate);
+      const dateB = new Date(b.expiryDate);
+      return sortDirection === "asc" ? dateB - dateA : dateA - dateB;
+    });
+    setItems(sortedItems);
+  };
+  
 
   const addItems = async (authUser) => {
     const currentDate = new Date().toLocaleString();
@@ -258,20 +277,21 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
     <Box sx={{ pt: 8 }} bgcolor="grey">
       <StyledPaper style={{ margin: 20, padding: 20 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <SearchField
-            id="search-food"
-            label="Search for food"
-            variant="outlined"
-            style={{ margin: 20 }}
-            InputProps={{
-              endAdornment: (
-                <Button position="end">
-                  <SearchIcon />
-                </Button>
-              ),
-            }}
-            
-          />
+        <SearchField
+          id="search-food"
+          label="Search for food"
+          variant="outlined"
+          style={{ margin: 20 }}
+          onChange={handleSearchChange}
+          InputProps={{
+            endAdornment: (
+              <Button position="end">
+                <SearchIcon />
+              </Button>
+            ),
+          }}
+        />
+
           
           <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
             Add Item
@@ -295,7 +315,10 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
                 <TableCell>Item</TableCell>
                 <TableCell>Is Expired</TableCell>
                 <TableCell >Purchase Date</TableCell>
-                <TableCell >Expiry Date</TableCell>
+                <TableCell onClick={handleSortByExpiryDate} style={{ cursor: 'pointer' }}>
+                  Expiry Date
+                  {sortDirection === "asc" ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+                </TableCell>
                 <TableCell >Expiry Days</TableCell>
                 <TableCell >Qty</TableCell>
                 <TableCell ></TableCell>
@@ -303,7 +326,13 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
               </TableRow>
             </StyledTableHead>
             <TableBody>
-              {items.map((item) => (
+              {items.filter((item) => item.name.toLowerCase().includes(searchTerm))
+              .sort((a, b) => {
+                const dateA = new Date(a.expiryDate);
+                const dateB = new Date(b.expiryDate);
+                return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+              })
+              .map((item) => (
                 <TableRow key={item._id}>
                   <TableCell>
                     {item.imageUrl && (
