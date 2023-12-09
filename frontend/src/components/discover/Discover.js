@@ -7,6 +7,7 @@ import {
     Button,
     Grid,
     Card,
+    CardContent,
     CardActionArea,
     Typography,
     Table,
@@ -20,8 +21,6 @@ import {
   } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-
-
 function Discover() {
   const history = useHistory();
   const [user, setUser] = useState(null);
@@ -31,7 +30,9 @@ function Discover() {
   const [listVisible, setListVisible] = useState(false);
   const [currentSelection, setCurrentSelection] = useState('');
   const [showDeleteButton, setShowDeleteButton] = useState(false);
-
+  const [recipes, setRecipes] = useState([]);
+  const [showRecipes, setShowRecipes] = useState(false);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -70,6 +71,7 @@ function Discover() {
     setListVisible(true); // Set the list as visible
     setCurrentSelection(days === 2 ? 'expire in 2 days' : 'expire in one week');
     setShowDeleteButton(false);
+    setShowRecipes(false);
   };
 
   const handleExpiredBoxClick = () => {
@@ -78,6 +80,7 @@ function Discover() {
     setListVisible(true);
     setCurrentSelection('expired');
     setShowDeleteButton(true); // Show the delete button
+    setShowRecipes(false);
   };
 
   if (error) {
@@ -99,29 +102,56 @@ function Discover() {
             setListVisible(false); // Hide the list initially
             setCurrentSelection(''); // Clear the current selection
             setShowDeleteButton(false); // Hide the delete button
+            setShowRecipes(false);
           } else {
             // Handle API error response
+            setShowRecipes(false);
             throw new Error('Failed to delete expired items');
+            
           }
 
       } catch (error) {
+        setShowRecipes(false);
         console.error("Error deleting expired items", error);
       }
+  };
+
+  const fetchRecipes = async () => {
+    try {
+      // Filter out expired items and extract the names
+      const validIngredients = foodItems
+        .filter(item => !item.isExpired)
+        .map(item => item.name);
+  
+      // Join the names into a string for the API query
+      const ingredientsQuery = validIngredients.join(",+");
+  
+      const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsQuery}&number=2&apiKey=a4a6dbafa80448fdba702620b1258d93`;
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      setRecipes(data);
+      setShowRecipes(true);
+      setListVisible(false); // Hide other lists
+      setShowDeleteButton(false); // Hide delete button
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+    }
   };
 
   return (
     <Box sx={{ flexGrow: 1, p: 10 }} bgcolor="grey">
       <Grid container spacing={2} justifyContent="center">
-      <Grid item>
-          <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <CardActionArea onClick={handleExpiredBoxClick} sx={{ textAlign: 'center' }}>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
-                Items already expired
-              </Typography>
-              <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
-            </CardActionArea>
-          </Card>
-        </Grid>
+          <Grid item>
+              <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                <CardActionArea onClick={handleExpiredBoxClick} sx={{ textAlign: 'center' }}>
+                  <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
+                    Items already expired
+                  </Typography>
+                  <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
+                </CardActionArea>
+              </Card>
+          </Grid>
           <Grid item>
             <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
               <CardActionArea onClick={() => handleBoxClick(2)} sx={{ textAlign: 'center' }}>
@@ -142,7 +172,16 @@ function Discover() {
               </CardActionArea>
             </Card>
           </Grid>
-
+          <Grid item>
+            <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <CardActionArea onClick={fetchRecipes} sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
+                  Discover Recipes
+                </Typography>
+                <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
+              </CardActionArea>
+            </Card>
+          </Grid>
       </Grid>
 
       {listVisible && (
@@ -222,6 +261,43 @@ function Discover() {
             </TableContainer>
           </Box>
         )}
+
+        {showRecipes && (
+          <>
+            <Typography 
+              variant="h6" 
+              sx={{ 
+                mt: 4, 
+                mb: 2, 
+                textAlign: 'center',
+                fontWeight: 'bold',
+                fontFamily: 'Arial' 
+              }}
+            >
+              These are the recipes you can cook with the food expiring in one week
+            </Typography>
+            <Grid container spacing={2} sx={{ mb: 4 }}>
+              {recipes.map((recipe) => (
+                <Grid item xs={12} sm={6} md={4} key={recipe.id}>
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={recipe.image}
+                      alt={recipe.title}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {recipe.title}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </>
+        )}
+
     </Box>
     
   );
