@@ -11,25 +11,20 @@ function Home() {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    // Listen for changes in authentication state
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
       if (authUser) {
-        // User is signed in
         setUser(authUser);
         fetchUserData(authUser);
       } else {
-        // No user is signed in, redirect to sign-in page
         history.push("/sign-in");
       }
     });
 
     return () => {
-      // Unsubscribe from the listener when the component unmounts
       unsubscribe();
     };
   }, [history]);
 
-  // Fetch user data using the provided access token
   const fetchUserData = async (authUser) => {
     try {
       const endpoint = process.env.REACT_APP_BACKEND_API + "/user";
@@ -47,10 +42,9 @@ function Home() {
   };
 
   if (!user || !userData) {
-    return null; // Render nothing until user is authenticated and user data is fetched
+    return null; 
   }
 
-  // Display the user's name in the welcome message
   const welcomeMessage = `Welcome home ${userData.name} !`;
 
   return (
@@ -58,7 +52,7 @@ function Home() {
       sx={{ 
         bgcolor: 'black',
         backgroundImage: `url(${backgroundImage})`,
-        backgroundSize: 'cover',     // Cover the entire space of the box
+        backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         display: 'flex', 

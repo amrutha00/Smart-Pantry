@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import Avatar from '@mui/material/Avatar';
@@ -8,7 +8,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import { auth } from "../../firebase";
-// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -16,7 +15,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { dark } from '@mui/material/styles/createPalette';
-import logoImage from '../../assets/logo5.png'; // Adjust the path as needed
+import logoImage from '../../assets/logo5.png';
+import homeImage from '../../assets/home.jpg';
+import settingsImage from '../../assets/settings.jpg';
 
 function Copyright(props) {
   return (
@@ -36,11 +37,21 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function SignInSide() {
-    const history = useHistory();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState(false);
+  const history = useHistory();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
 
+  useEffect(() => {
+    preloadImages(logoImage, homeImage, settingsImage); 
+  }, []);
+
+  const preloadImages = (...images) => {
+      images.forEach((imageUrl) => {
+        const img = new Image();
+        img.src = imageUrl;
+      });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();

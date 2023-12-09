@@ -126,7 +126,7 @@ function Discover() {
       // Join the names into a string for the API query
       const ingredientsQuery = validIngredients.join(",+");
   
-      const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsQuery}&number=2&apiKey=a4a6dbafa80448fdba702620b1258d93`;
+      const url = `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredientsQuery}&apiKey=a4a6dbafa80448fdba702620b1258d93`;
       const response = await fetch(url);
       const data = await response.json();
   
