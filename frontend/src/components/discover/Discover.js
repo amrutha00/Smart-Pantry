@@ -1,4 +1,3 @@
-// Discover.js
 import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -19,6 +18,7 @@ import {
     Paper,
     CardMedia
   } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import backgroundImg from '../../assets/discover.jpg';
 
@@ -34,7 +34,10 @@ function Discover() {
   const [showDeleteButton, setShowDeleteButton] = useState(false);
   const [recipes, setRecipes] = useState([]);
   const [showRecipes, setShowRecipes] = useState(false);
-  
+  const [recipeDetails, setRecipeDetails] = useState(null);
+  const [recipeTitle, setRecipeTitle] = useState("Recipe Details");
+  const [openRecipeDialog, setOpenRecipeDialog] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -140,6 +143,57 @@ function Discover() {
       console.error("Error fetching recipes:", error);
     }
   };
+
+  const handleRecipeClick = async (recipeId, recipeTitle) => {
+    try {
+      const url = `https://api.spoonacular.com/recipes/${recipeId}/analyzedInstructions?apiKey=a4a6dbafa80448fdba702620b1258d93`;
+      const response = await fetch(url);
+      const data = await response.json();
+  
+      setRecipeTitle(recipeTitle);
+      setRecipeDetails(data);
+      setOpenRecipeDialog(true);
+      setListVisible(false);
+      setShowDeleteButton(false);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching recipe details:", error);
+    }
+  };
+
+  const RecipeDialog = () => (
+    
+    <Dialog open={openRecipeDialog} onClose={() => setOpenRecipeDialog(false)} maxWidth="md">
+      <DialogTitle>
+        {recipeTitle}
+      </DialogTitle>
+      <DialogContent>
+        {recipeDetails && recipeDetails.length > 0 ? (
+          recipeDetails.map((section, index) => (
+            <div key={index}>
+              {section.name && (
+                <Typography variant="h6" style={{ marginTop: '10px', fontWeight: 'bold' }}>
+                  {section.name}
+                </Typography>
+              )}
+              {section.steps.map((step, stepIndex) => (
+                <Typography key={stepIndex} style={{ marginTop: '10px' }}>
+                  <strong>Step {step.number}:</strong> {step.step}
+                </Typography>
+              ))}
+            </div>
+          ))
+        ) : (
+          <Typography>Loading...</Typography>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={() => setOpenRecipeDialog(false)}>Close</Button>
+      </DialogActions>
+    </Dialog>
+  );
+  
+  
 
   return (
     <Box 
@@ -293,7 +347,7 @@ function Discover() {
             <Grid container spacing={2} sx={{ mb: 4 }}>
               {recipes.map((recipe) => (
                 <Grid item xs={12} sm={6} md={4} key={recipe.id}>
-                  <Card>
+                  <Card onClick={() => handleRecipeClick(recipe.id, recipe.title)}>
                     <CardMedia
                       component="img"
                       height="140"
@@ -311,7 +365,7 @@ function Discover() {
             </Grid>
           </>
         )}
-
+     <RecipeDialog />
     </Box>
     
   );
