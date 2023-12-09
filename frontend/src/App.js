@@ -1,7 +1,4 @@
 import './App.css';
-import SignIn from './components/auth/SignIn';
-import SignUp from './components/auth/SignUp';
-import AuthDetails from './components/AuthDetails';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/home/Home';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -11,6 +8,8 @@ import SignInSide from './components/auth/SignInSide';
 import SignUpSide from './components/auth/SignUpSide';
 import SettingsPage from './components/settings/SettingsPage'; 
 import FoodItems from './components/fooditems/FoodItems';
+import Discover from './components/discover/Discover'; // Import the component
+
 
 function App() {
   let user = getAuth().currentUser;
@@ -45,6 +44,10 @@ function App() {
         <Route exact path='/food-items'>
           <Header />
           <FoodItems />
+        </Route>
+        <Route exact path='/discover'>
+          <Header />
+          <Discover />
         </Route>
         <Route exact path='*'>
           <SignInSide></SignInSide>

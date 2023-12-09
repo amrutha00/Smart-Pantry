@@ -18,6 +18,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import ExploreIcon from '@mui/icons-material/Explore';
 
 
 function Header() {
@@ -80,11 +81,15 @@ function Header() {
         onKeyDown={toggleDrawer(anchor, false)}
     >
         <List>
-            {['Home', 'Food Items', 'Settings'].map((text, index) => (
+            {['Home', 'Food Items', 'Discover', 'Settings'].map((text, index) => (
                 <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => handleNavigation(text)}>
                         <ListItemIcon>
-                            {text === 'Home' ? <HomeIcon /> : text === 'Settings' ? <SettingsIcon /> : text === 'Food Items' ? <DinnerDiningIcon /> : <MailIcon />}
+                            {text === 'Home' ? <HomeIcon /> : 
+                            text === 'Settings' ? <SettingsIcon /> : 
+                            text === 'Food Items' ? <DinnerDiningIcon /> : 
+                            text === 'Discover' ? <ExploreIcon /> : 
+                            <MailIcon />}
                         </ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItemButton>
@@ -105,6 +110,8 @@ function Header() {
           case 'Settings':
               history.push('/settings');
               break;
+          case 'Discover':
+              history.push('/discover');
           default:
               break;
       }
