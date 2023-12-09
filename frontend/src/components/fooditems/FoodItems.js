@@ -94,15 +94,30 @@ function FoodItems() {
     };
   }, [history]);
 
+  const fetchItems = async (authUser) => {
+    try {
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const response = await fetch(endpoint, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setItems(data.data);
+    } catch (error) {
+      console.error("Error fetching items data:", error);
+    }
+  };
+
   // State for the add item dialog
   const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
   
-
   const [newItem, setNewItem] = useState({
     name: '',
     quantity: '',
-    boughtDate: null, // Initialize with null or a default date
-    expiryDate: null,   // Initialize with null or a default date
+    boughtDate: null,
+    expiryDate: null,
   });
   
   // State for the edit item dialog
@@ -192,24 +207,6 @@ function FoodItems() {
     }
   };
 
-  const fetchItems = async (authUser) => {
-    try {
-        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
-      const response = await fetch(endpoint, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-      });
-      const data = await response.json();
-      setItems(data.data);
-    } catch (error) {
-      console.error("Error fetching items data:", error);
-    }
-  };
-
-  //for update items
-
   const handleEditItem = (itemToEdit) => {
     setEditedItem({ ...itemToEdit });
     setOpenEditItemDialog(true);
@@ -281,14 +278,13 @@ function FoodItems() {
       sx={{ 
         pt: 8, 
         minHeight: '100vh',
-        bgcolor: 'black',
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
         display: 'flex', 
         justifyContent: 'center', 
-        alignItems: 'center'
+        alignItems: 'top'
       }} 
     >
 
@@ -298,7 +294,7 @@ function FoodItems() {
               id="search-food"
               label="Search for food"
               variant="outlined"
-              style={{ margin: 20 }}
+              style={{ margin: 10 }}
               onChange={handleSearchChange}
               InputProps={{
                 endAdornment: (
@@ -309,37 +305,36 @@ function FoodItems() {
               }}
             />
 
-              <div>
+            <div>
               <StyledAddButton 
                 variant="contained" 
                 sx={{ 
                   backgroundColor: 'green',
                   '&:hover': {
                     backgroundColor: 'darkgreen',
-                  },
-                  margin: 2
+                  }
                 }}
                 onClick={handleOpenAddItemDialog}
               >
                 Add Item
               </StyledAddButton>
 
-
-                <StyledAddButton 
-                        variant="contained" 
-                        sx={{ 
-                          backgroundColor: 'error.main',
-                          '&:hover': {
-                            backgroundColor: 'error.dark',
-                          },
-                          margin: 2
-                        }}
-                        onClick={handleDeleteAllExpired}
-                      >
-                        Delete all expired items
-                </StyledAddButton>
-              </div>
+              <StyledAddButton 
+                      variant="contained" 
+                      sx={{ 
+                        backgroundColor: 'error.main',
+                        '&:hover': {
+                          backgroundColor: 'error.dark',
+                        },
+                        margin: 2
+                      }}
+                      onClick={handleDeleteAllExpired}
+                    >
+                      Delete all expired items
+              </StyledAddButton>
+            </div>
         </div>
+        
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
             <StyledTableHead>
