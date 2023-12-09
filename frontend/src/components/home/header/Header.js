@@ -19,6 +19,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import ExploreIcon from '@mui/icons-material/Explore';
+import logoImage from '../../../assets/logo2.png'; // Adjust the path as needed
 
 
 function Header() {
@@ -162,13 +163,17 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography 
-                variant="h6" 
-                component="div" 
-                sx={{ flexGrow: 1, cursor: 'pointer' }} // Add cursor style
-                onClick={handleTitleClick} // Attach the click handler
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1, cursor: 'pointer', display: 'flex', alignItems: 'center' }} // Add cursor style and center vertically
+              onClick={handleTitleClick} // Attach the click handler
             >
-                FreshPlate
+              <img
+                src={logoImage}
+                alt="Logo"
+                style={{ width: '150px', height: '50px', marginTop: '10px' }} // Adjust the width, height, and margin as needed
+              />
             </Typography>
             {/* Display the user's name */}
             {userData && (
