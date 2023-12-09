@@ -130,11 +130,12 @@ function FoodItems() {
 
   const handleCloseAddItemDialog = () => {
     setOpenAddItemDialog(false);
+    setexpiryError(false);
+    setexpiryError2(false);
   };
 
   const handleAddItem = async () => {
     addItems(user);
-   
   };
 
   const handleSearchChange = (event) => {
@@ -158,19 +159,19 @@ function FoodItems() {
     const boughtDate = new Date(newItem.boughtDate);
     // Check if the expiryDate is greater than or equal to the current date
     if (expiryDate.getTime() < currentDate.getTime()) {
-    setexpiryError(true);
-    console.log("set expiry error");
-      return; // Exit the function without making the API call
+        setexpiryError(true);
+        console.log("set expiry error");
+        return;
     }
 
     if (expiryDate.getTime() <= boughtDate.getTime()) {
         setexpiryError2(true);
         console.log("set expiry error2");
-          return; // Exit the function without making the API call
-        }
+          return; 
+    }
 
     try {
-        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+      const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
       const response = await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -416,27 +417,26 @@ function FoodItems() {
               onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-            
-      <DatePicker
-        label="Purchase Date"
-        value={newItem.boughtDate}
-        onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
-        renderInput={(params) => <TextField {...params} margin="normal" />}
-      />
-      
-      <DatePicker
-        label="Expiry Date"
-        value={newItem.expiryDate}
-        onChange={(date) => {
-            setNewItem({ ...newItem, expiryDate: date });
-            setexpiryError(false); // Set expiryError to false
-            setexpiryError2(false); // Set expiryError2 to false
-          }}
-        renderInput={(params) => <TextField {...params} margin="normal" />}
-      />
-    </LocalizationProvider>
-    {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
-    {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
+                <DatePicker
+                  label="Purchase Date"
+                  value={newItem.boughtDate}
+                  onChange={(date) => setNewItem({ ...newItem, boughtDate: date })}
+                  renderInput={(params) => <TextField {...params} margin="normal" />}
+                />
+                
+                <DatePicker
+                  label="Expiry Date"
+                  value={newItem.expiryDate}
+                  onChange={(date) => {
+                      setNewItem({ ...newItem, expiryDate: date });
+                      setexpiryError(false); // Set expiryError to false
+                      setexpiryError2(false); // Set expiryError2 to false
+                    }}
+                  renderInput={(params) => <TextField {...params} margin="normal" />}
+                />
+            </LocalizationProvider>
+            {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+            {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseAddItemDialog} color="secondary">
