@@ -119,6 +119,7 @@ function SettingsPage() {
             Settings
           </Typography>
           <TextField
+            disabled
             label="Email"
             value={userData.email}
             margin="normal"
@@ -128,6 +129,7 @@ function SettingsPage() {
             }}
           />
           <TextField
+            disabled
             label="Name"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
