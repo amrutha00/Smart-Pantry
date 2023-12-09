@@ -123,7 +123,12 @@ function FoodItems() {
   
   // State for the edit item dialog
   const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
-  const [editedItem, setEditedItem] = useState({ ...newItem });
+  const [editedItem, setEditedItem] = useState({
+    name: '',
+    quantity: '',
+    boughtDate: null,
+    expiryDate: null,
+  });
 
   const handleOpenAddItemDialog = () => {
     setOpenAddItemDialog(true);
@@ -133,7 +138,21 @@ function FoodItems() {
     setOpenAddItemDialog(false);
     setexpiryError(false);
     setexpiryError2(false);
+    setexpiryError3(false);
     setNewItem({
+      name: '',
+      quantity: '',
+      boughtDate: null,
+      expiryDate: null,
+    })
+  };
+
+  const handleCloseEditItemDialog = () => {
+    setOpenEditItemDialog(false);
+    setexpiryError(false);
+    setexpiryError2(false);
+    setexpiryError3(false);
+    setEditedItem({
       name: '',
       quantity: '',
       boughtDate: null,
@@ -207,6 +226,58 @@ function FoodItems() {
     }
   };
 
+  const updateItem = async (authUser) => {
+    try {
+
+      const { name, quantity, boughtDate, expiryDate } = editedItem;
+
+      if (!name || !quantity || !boughtDate || !expiryDate) {
+        console.log("Fields are empty");
+        setexpiryError3(true);
+        return;
+      }
+      else {
+        setexpiryError3(false);
+      }
+
+      const currentDate = new Date();
+      const expiry = new Date(expiryDate);
+      const bought = new Date(boughtDate);
+      // Check if the expiryDate is greater than or equal to the current date
+      if (expiry.getTime() < currentDate.getTime()) {
+          setexpiryError(true);
+          console.log("Item already expired error");
+          return;
+      }
+
+    if (expiry.getTime() <= bought.getTime()) {
+        setexpiryError2(true);
+        console.log("Expiry date is before purchase date error");
+        return; 
+    }
+
+      const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
+      const response = await fetch(endpoint, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authUser.accessToken}`,
+        },
+        body: JSON.stringify(editedItem),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to update item');
+      }
+  
+      fetchItems(authUser);
+      handleCloseEditItemDialog();
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
+  };
+
+
   const deleteItem = async (itemId, authUser) => {
     try {
         const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/";
@@ -230,37 +301,11 @@ function FoodItems() {
     setOpenEditItemDialog(true);
   };
   
-  const handleCloseEditItemDialog = () => {
-    setOpenEditItemDialog(false);
-  };
   
   const handleUpdateItem = async () => {
     updateItem(user);
   };
   
-  const updateItem = async (authUser) => {
-    try {
-      const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
-      const response = await fetch(endpoint, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-        body: JSON.stringify(editedItem),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to update item');
-      }
-  
-      fetchItems(authUser);
-      handleCloseEditItemDialog();
-    } catch (error) {
-      console.error('Error updating item:', error);
-    }
-  };
-
   const handleDeleteAllExpired = async () => {
     try {
             const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/expired";
@@ -286,10 +331,6 @@ function FoodItems() {
   if (error) {
     return <Typography color="error">{error}</Typography>;
   }
-
-  // if (items.length === 0) {
-  //   return <Typography>No food items found.</Typography>;
-  // }
 
   return (
     <Box 
@@ -486,29 +527,46 @@ function FoodItems() {
               fullWidth
               margin="normal"
               value={editedItem.name}
-              onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+              onChange={(e) => {
+                setexpiryError3(false);
+                setEditedItem({ ...editedItem, name: e.target.value })
+              }}
             />
             <TextField
               label="Quantity"
               fullWidth
               margin="normal"
               value={editedItem.quantity}
-              onChange={(e) => setEditedItem({ ...editedItem, quantity: e.target.value })}
+              onChange={(e) => {
+                setexpiryError3(false);
+                setEditedItem({ ...editedItem, quantity: e.target.value })
+                }}
             />
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Purchase Date"
-                onChange={(date) => setEditedItem({ ...editedItem, boughtDate: date })}
+                onChange={(date) => {
+                  setexpiryError2(false);
+                  setexpiryError3(false);
+                  setEditedItem({ ...editedItem, boughtDate: date })
+                }}
                 renderInput={(params) => <TextField {...params} margin="normal" />}
               />
               <DatePicker
                 label="Expiry Date"
-                onChange={(date) => setEditedItem({ ...editedItem, expiryDate: date })}
+                onChange={(date) => {
+                  setexpiryError(false);
+                  setexpiryError2(false);
+                  setexpiryError3(false);
+                  setEditedItem({ ...editedItem, expiryDate: date })
+                }}
                 renderInput={(params) => <TextField {...params} margin="normal" />}
               />
             </LocalizationProvider>
-            {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
+            {expiryerror && <Alert severity="error">Item Already Expired. Delete the item.</Alert>}
             {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
+            {expiryerror3 && <Alert severity="error"> Enter all the details to add</Alert>}
+
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseEditItemDialog}>Cancel</Button>
