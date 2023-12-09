@@ -184,7 +184,7 @@ function Discover() {
             </div>
           ))
         ) : (
-          <Typography>Loading...</Typography>
+          <Typography>Recipe Instructions not available</Typography>
         )}
       </DialogContent>
       <DialogActions>
