@@ -292,20 +292,25 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
           }}
         />
 
-          
-          <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
-            Add Item
-          </StyledAddButton>
+          <div>
+            <StyledAddButton variant="contained" style={{ margin: 20 }} color="primary" onClick={handleOpenAddItemDialog}>
+              Add Item
+            </StyledAddButton>
 
-          <StyledAddButton 
-                  variant="contained" 
-                  color="error" 
-                //   sx={{ mb: 2 }}
-                style={{ margin: 20 }}
-                  onClick={handleDeleteAllExpired}
-                >
-                  Delete all expired items
-          </StyledAddButton>
+            <StyledAddButton 
+                    variant="contained" 
+                    sx={{ 
+                      backgroundColor: 'error.main',
+                      '&:hover': {
+                        backgroundColor: 'error.dark',
+                      },
+                      margin: 2
+                    }}
+                    onClick={handleDeleteAllExpired}
+                  >
+                    Delete all expired items
+            </StyledAddButton>
+          </div>
           </div>
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
