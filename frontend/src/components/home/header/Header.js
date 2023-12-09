@@ -20,7 +20,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import ExploreIcon from '@mui/icons-material/Explore';
 import logoImage from '../../../assets/logo5.png'; // Adjust the path as needed
-
+import PersonIcon from '@mui/icons-material/Person';
 
 function Header() {
   const history = useHistory();
@@ -177,24 +177,29 @@ function Header() {
             </Typography>
             {/* Display the user's name */}
             {userData && (
+              <Box
+                sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  marginRight: "20px", 
+                  marginLeft: "8px", 
+                  cursor: 'pointer',
+                  '&:hover': {
+                    color: 'secondary.main', // or any other color
+                    textDecoration: 'bold', // optional: if you want to underline on hover
+                  }
+                }}
+                onClick={handleUserClick}
+              >
+                <PersonIcon sx={{ marginRight: 1 }}/> {/* Adjust the margin as needed */}
                 <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ 
-                        marginRight: "20px", 
-                        marginLeft: "8px", 
-                        cursor: 'pointer',
-                        '&:hover': {
-                            color: 'secondary.main', // or any other color
-                            textDecoration: 'bold', // optional: if you want to underline on hover
-                        }
-                    }}
-                    onClick={handleUserClick}
+                  variant="h6"
+                  component="div"
                 >
-                    {userData.name}
+                  {userData.name}
                 </Typography>
+              </Box>
             )}
-            {/* <Button color="inherit">Login</Button> */}
             <AuthDetails></AuthDetails>
           </Toolbar>
         </AppBar>
