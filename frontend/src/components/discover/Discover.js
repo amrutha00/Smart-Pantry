@@ -209,46 +209,114 @@ function Discover() {
       bgcolor="grey"
     >
       <Grid container spacing={2} justifyContent="center">
-          <Grid item>
-              <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <CardActionArea onClick={handleExpiredBoxClick} sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
-                    Food already expired
-                  </Typography>
-                  <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
-                </CardActionArea>
-              </Card>
-          </Grid>
-          <Grid item>
-            <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <CardActionArea onClick={() => handleBoxClick(2)} sx={{ textAlign: 'center' }}>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial'}}>
-                  Food expiring in 2 days
-                </Typography>
-                <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
-              </CardActionArea>
-            </Card>
-          </Grid>
-          <Grid item>
-            <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <CardActionArea onClick={() => handleBoxClick(7)} sx={{ textAlign: 'center' }}>
+      <Grid item>
+          <Card 
+            sx={{ 
+              width: 250, 
+              height: 250, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              backgroundColor: 'black',
+              '&:hover': {
+                backgroundColor: 'rgba(4, 4, 4, 0.5)', 
+                transform: 'scale(1.05)', // Slightly increase the size of the card on hover
+                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // Add a shadow effect on hover
+                cursor: 'pointer', // Change the cursor to indicate clickable
+              }
+            }}
+            onClick={handleExpiredBoxClick} // Apply click handler to the Card
+          >
+              <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
-                  Food expiring in one week
+                  Food already expired
                 </Typography>
                 <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
-              </CardActionArea>
+              </CardContent>
             </Card>
-          </Grid>
-          <Grid item>
-            <Card sx={{ width: 250, height: 250, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <CardActionArea onClick={fetchRecipes} sx={{ textAlign: 'center' }}>
+      </Grid>
+      <Grid item>
+          <Card 
+            sx={{ 
+              width: 250, 
+              height: 250, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              backgroundColor: 'black',
+              '&:hover': {
+                backgroundColor: 'rgba(4, 4, 4, 0.5)', 
+                transform: 'scale(1.05)', // Slightly increase the size of the card on hover
+                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // Add a shadow effect on hover
+                cursor: 'pointer', // Change the cursor to indicate clickable
+              }
+            }}
+            onClick={() => handleBoxClick(2)} // Apply click handler to the Card
+          >
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
+                  Food expiring in next 2 days
+                </Typography>
+                <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
+              </CardContent>
+            </Card>
+      </Grid>
+      <Grid item>
+          <Card 
+            sx={{ 
+              width: 250, 
+              height: 250, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              backgroundColor: 'black',
+              '&:hover': {
+                backgroundColor: 'rgba(4, 4, 4, 0.5)', 
+                transform: 'scale(1.05)', // Slightly increase the size of the card on hover
+                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // Add a shadow effect on hover
+                cursor: 'pointer', // Change the cursor to indicate clickable
+              }
+            }}
+            onClick={() => handleBoxClick(7)} // Apply click handler to the Card
+          >
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
+                  Food expiring in next one week
+                </Typography>
+                <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
+              </CardContent>
+            </Card>
+      </Grid>
+      <Grid item>
+          <Card 
+            sx={{ 
+              width: 250, 
+              height: 250, 
+              display: 'flex', 
+              flexDirection: 'column', 
+              justifyContent: 'center', 
+              alignItems: 'center',
+              backgroundColor: 'black',
+              '&:hover': {
+                backgroundColor: 'rgba(4, 4, 4, 0.5)', 
+                transform: 'scale(1.05)', // Slightly increase the size of the card on hover
+                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // Add a shadow effect on hover
+                cursor: 'pointer', // Change the cursor to indicate clickable
+              }
+            }}
+            onClick={fetchRecipes} // Apply click handler to the Card
+          >
+              <CardContent sx={{ textAlign: 'center' }}>
                 <Typography variant="h4" sx={{ fontWeight: 'bold', fontFamily: 'Arial' }}>
                   Discover Recipes
                 </Typography>
                 <KeyboardArrowDownIcon sx={{ fontSize: 50 }} />
-              </CardActionArea>
+              </CardContent>
             </Card>
-          </Grid>
+      </Grid>
       </Grid>
 
       {listVisible && (
