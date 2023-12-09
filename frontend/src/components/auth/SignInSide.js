@@ -16,6 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { dark } from '@mui/material/styles/createPalette';
+import logoImage from '../../assets/logo2.png'; // Adjust the path as needed
 
 function Copyright(props) {
   return (
@@ -91,6 +92,11 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
+            <img
+              src={logoImage}
+              alt="Logo"
+              style={{ width: '300px', height: '100px', marginBottom: '20px'}}
+            />
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <LockOutlinedIcon />
             </Avatar>
