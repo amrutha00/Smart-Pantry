@@ -16,7 +16,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { dark } from '@mui/material/styles/createPalette';
-import logoImage from '../../assets/logo2.png'; // Adjust the path as needed
+import logoImage from '../../assets/logo5.png'; // Adjust the path as needed
 
 function Copyright(props) {
   return (

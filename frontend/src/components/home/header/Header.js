@@ -19,7 +19,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
 import ExploreIcon from '@mui/icons-material/Explore';
-import logoImage from '../../../assets/logo2.png'; // Adjust the path as needed
+import logoImage from '../../../assets/logo5.png'; // Adjust the path as needed
 
 
 function Header() {
