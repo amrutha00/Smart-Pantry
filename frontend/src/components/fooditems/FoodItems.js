@@ -137,17 +137,17 @@ const [editedItem, setEditedItem] = useState({ ...newItem });
   
 
   const addItems = async (authUser) => {
-    const currentDate = new Date().toLocaleString();
-    const expiryDate = new Date(newItem.expiryDate).toLocaleString();
-    const boughtDate = new Date(newItem.boughtDate).toLocaleString();
+    const currentDate = new Date();
+    const expiryDate = new Date(newItem.expiryDate);
+    const boughtDate = new Date(newItem.boughtDate);
     // Check if the expiryDate is greater than or equal to the current date
-    if (expiryDate < currentDate) {
+    if (expiryDate.getTime() < currentDate.getTime()) {
     setexpiryError(true);
     console.log("set expiry error");
       return; // Exit the function without making the API call
     }
 
-    if (expiryDate <= boughtDate) {
+    if (expiryDate.getTime() <= boughtDate.getTime()) {
         setexpiryError2(true);
         console.log("set expiry error2");
           return; // Exit the function without making the API call
