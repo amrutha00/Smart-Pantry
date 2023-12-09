@@ -30,6 +30,8 @@ import Alert from '@mui/material/Alert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import backgroundImage from '../../assets/fooditems.jpg';
+import dayjs from 'dayjs';
+
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     margin: theme.spacing(3),
@@ -297,7 +299,12 @@ function FoodItems() {
   };
 
   const handleEditItem = (itemToEdit) => {
-    setEditedItem({ ...itemToEdit });
+    const editedItemWithDayjs = {
+      ...itemToEdit,
+      boughtDate: itemToEdit.boughtDate ? dayjs(itemToEdit.boughtDate) : null,
+      expiryDate: itemToEdit.expiryDate ? dayjs(itemToEdit.expiryDate) : null,
+    };
+    setEditedItem(editedItemWithDayjs);
     setOpenEditItemDialog(true);
   };
   
@@ -545,6 +552,7 @@ function FoodItems() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Purchase Date"
+                value={editedItem.boughtDate}
                 onChange={(date) => {
                   setexpiryError2(false);
                   setexpiryError3(false);
@@ -554,6 +562,7 @@ function FoodItems() {
               />
               <DatePicker
                 label="Expiry Date"
+                value={editedItem.expiryDate}
                 onChange={(date) => {
                   setexpiryError(false);
                   setexpiryError2(false);
