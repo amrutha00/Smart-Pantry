@@ -347,7 +347,16 @@ function Discover() {
             <Grid container spacing={2} sx={{ mb: 4 }}>
               {recipes.map((recipe) => (
                 <Grid item xs={12} sm={6} md={4} key={recipe.id}>
-                  <Card onClick={() => handleRecipeClick(recipe.id, recipe.title)}>
+                  <Card 
+                    sx={{
+                      '&:hover': {
+                        transform: 'scale(1.05)', // Slightly increase the size of the card on hover
+                        boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)', // Add a shadow effect on hover
+                        cursor: 'pointer', // Change the cursor to indicate clickable
+                      }
+                    }}
+                    onClick={() => handleRecipeClick(recipe.id, recipe.title)}
+                  >
                     <CardMedia
                       component="img"
                       height="140"
