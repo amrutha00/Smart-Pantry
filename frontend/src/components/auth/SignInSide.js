@@ -15,6 +15,7 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { dark } from '@mui/material/styles/createPalette';
 
 function Copyright(props) {
   return (
@@ -63,7 +64,7 @@ export default function SignInSide() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={dark}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -132,9 +133,18 @@ export default function SignInSide() {
                 <Grid item xs>
                 </Grid>
                 <Grid item>
-                  <Link to="/sign-up" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
+                    <Link
+                      to="/sign-up"
+                      variant="body2"
+                      style={{
+                        color: "white",       // Make the text white
+                        fontFamily: "Arial",  // Change the font
+                        fontSize: "16px",      // Change the font size
+                        textDecoration: "none"
+                      }}
+                    >
+                      {"Don't have an account? Sign Up"}
+                    </Link>
                 </Grid>
               </Grid>
               {/* <Copyright sx={{ mt: 5 }} /> */}

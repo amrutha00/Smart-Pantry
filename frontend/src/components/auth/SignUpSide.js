@@ -6,8 +6,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Alert from '@mui/material/Alert';
 import { auth } from "../../firebase";
 // import Link from '@mui/material/Link';
@@ -17,6 +15,8 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { dark } from '@mui/material/styles/createPalette';
+
 
 function Copyright(props) {
   return (
@@ -90,7 +90,7 @@ export default function SignUpSide() {
 }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={dark}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -171,9 +171,18 @@ export default function SignUpSide() {
                 <Grid item xs>
                 </Grid>
                 <Grid item>
-                  <Link to="/sign-in" variant="body2">
-                    {"Already have an account? Sign In"}
-                  </Link>
+                    <Link
+                      to="/sign-in"
+                      variant="body2"
+                      style={{
+                        color: "white",       // Make the text white
+                        fontFamily: "Arial",  // Change the font
+                        fontSize: "16px",      // Change the font size
+                        textDecoration: "none"
+                      }}
+                    >
+                      {"Already have an account? Sign In"}
+                    </Link>
                 </Grid>
               </Grid>
               {/* <Copyright sx={{ mt: 5 }} /> */}
