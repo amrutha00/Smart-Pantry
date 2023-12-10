@@ -161,7 +161,6 @@ function SettingsPage() {
             }}
           />
           <TextField
-           disabled
             label="Name"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
