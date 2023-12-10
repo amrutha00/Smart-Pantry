@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
-const { checkExpiredItems } = require('./expiredItemsHandlerRoutes');
+//const { checkExpiredItems } = require('./expiredItemsHandlerRoutes');
 
 // Register route
 router.post('/register', (req, res) => {
