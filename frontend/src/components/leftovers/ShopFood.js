@@ -25,21 +25,21 @@ function ShopFood() {
     };
   }, [history]);
 
-  const fetchUserData = async (authUser) => {
-    try {
-      const endpoint = process.env.REACT_APP_BACKEND_API + '/user';
-      const response = await fetch(endpoint, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-      });
-      const data = await response.json();
-      setUserData(data.data);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+  // const fetchUserData = async (authUser) => {
+  //   try {
+  //     const endpoint = process.env.REACT_APP_BACKEND_API + '/user';
+  //     const response = await fetch(endpoint, {
+  //       method: 'GET',
+  //       headers: {
+  //         Authorization: `Bearer ${authUser.accessToken}`,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     setUserData(data.data);
+  //   } catch (error) {
+  //     console.error('Error fetching user data:', error);
+  //   }
+  // };
 
   // if (!user || !userData) {
   //   return null;

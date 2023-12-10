@@ -129,7 +129,7 @@ function LeftOvers() {
   
   const [newItem, setNewItem] = useState({
     name: '',
-    quantity: 0,
+   quantity: '',
     expiryDate: null,
   });
   
@@ -137,7 +137,7 @@ function LeftOvers() {
   const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
   const [editedItem, setEditedItem] = useState({
     name: '',
-    quantity: 0,
+   quantity: '',
     
     expiryDate: null,
   });
@@ -153,7 +153,7 @@ function LeftOvers() {
     setexpiryError3(false);
     setNewItem({
       name: '',
-      quantity: 0,
+     quantity: '',
       postedDate: null,
       expiryDate: null,
     })
@@ -186,7 +186,8 @@ function LeftOvers() {
           console.log("Item already expired error");
           return;
       }
-      if (quantity <= 0)
+      const num_quantity = parseInt(quantity);
+      if (!isNaN(num_quantity) && num_quantity <= 0)
       {
          setexpiryError3(true);
           console.log("Quantity must be greater than 0");
@@ -228,7 +229,7 @@ function LeftOvers() {
     setexpiryError3(false);
     setEditedItem({
       name: '',
-      quantity: 0,
+     quantity: '',
       expiryDate: null,
     })
   };
@@ -270,7 +271,8 @@ function LeftOvers() {
           console.log("Item already expired error");
           return;
       }
-      if (quantity <= 0)
+      const num_quantity = parseInt(quantity);
+      if (!isNaN(num_quantity) && num_quantity <= 0)
       {
          setexpiryError3(true);
           console.log("Quantity must be greater than 0");

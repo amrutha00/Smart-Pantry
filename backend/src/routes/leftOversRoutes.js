@@ -42,8 +42,8 @@ router.get('/', verifyToken, async (req, res) => {
   });
 router.post('/', verifyToken, async (req, res) => {
     try {
-        let { name, quantity, expiryDate } = req.body;
-        quantity = Number(quantity);
+        const { name, quantity, expiryDate } = req.body;
+       const num_quantity = parseInt(quantity);
         const userId = req.user.user_id;
         //console.log(userId);
         // Fetch user's timezone from Firestore
@@ -69,7 +69,7 @@ router.post('/', verifyToken, async (req, res) => {
         if (moment().tz(timezone).isAfter(moment(expiryDate))) {
             return res.status(400).json({ message: "The item is already expired", data: {} });
         }
-        if(quantity <= 0){
+        if(!isNaN(num_quantity) && num_quantity <= 0){
             return res.status(400).json({message: "Quantity must be greater than 0",data:{}});
         }
 
@@ -89,8 +89,8 @@ router.post('/', verifyToken, async (req, res) => {
 // Update Leftover Food Item
 router.put('/:id', verifyToken, async (req, res) => {
     try {
-      let { name, quantity, expiryDate } = req.body;
-      quantity = Number(quantity);
+      const { name, quantity, expiryDate } = req.body;
+      const num_quantity = parseInt(quantity);
       //console.log("in put",name,quantity,quantity===0, Number(quantity)===0);
       const userId = req.user.user_id;
       const itemId = req.params.id;
@@ -110,9 +110,10 @@ router.put('/:id', verifyToken, async (req, res) => {
         return res.status(404).json({ message: 'Item not found for the user', data: {} });
       }
       
-      if(quantity <= 0){
-        return res.status(400).json({message: "Please delete the item if the quantity is 0 ",data:{}});
-        }
+      if(!isNaN(num_quantity) && num_quantity <= 0){
+        return res.status(400).json({message: "Quantity must be greater than 0",data:{}});
+    }
+
       // Check if the item is already expired
       if (moment().tz(timezone).isAfter(moment(expiryDate))) {
 

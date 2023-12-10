@@ -9,6 +9,9 @@ import SignUpSide from './components/auth/SignUpSide';
 import SettingsPage from './components/settings/SettingsPage'; 
 import FoodItems from './components/fooditems/FoodItems';
 import Discover from './components/discover/Discover'; // Import the component
+import ShopFood from './components/leftovers/ShopFood';
+import LeftOvers from './components/leftovers/LeftOvers';
+import Pantry from './components/leftovers/Pantry';
 
 
 function App() {
@@ -44,6 +47,19 @@ function App() {
         <Route exact path='/food-items'>
           <Header />
           <FoodItems />
+        </Route>
+       
+        <Route exact path='/shop-food'>
+          <Header />
+          <ShopFood />
+        </Route>
+        <Route exact path='/left-overs'>
+          <Header />
+          <LeftOvers />
+        </Route>
+        <Route exact path='/pantry'>
+          <Header />
+          <Pantry />
         </Route>
         <Route exact path='/discover'>
           <Header />
