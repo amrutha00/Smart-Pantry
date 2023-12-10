@@ -416,11 +416,6 @@ function FoodItems() {
               </StyledAddButton>
             </div>
         </div>
-
-        {isLoading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-          <CircularProgress />
-        </Box>)}
         
         <TableContainer component={Paper}>
           <Table aria-label="food items table">
@@ -485,6 +480,11 @@ function FoodItems() {
             </TableBody>
           </Table>
         </TableContainer>
+
+        {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <CircularProgress />
+        </Box>)}
 
         {/* Add Item Dialog */}
         <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
