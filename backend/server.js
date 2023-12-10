@@ -8,7 +8,7 @@ const authRoutes = require('./src/routes/authRoutes');
 const foodItemsRoutes = require('./src/routes/foodItemsRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const timezoneRoutes = require('./src/routes/timezoneRoutes');
-
+const leftOverfoodItemsRoutes = require('./src/routes/leftOversRoutes');
 const app = express();
 
 app.use(express.json()); // for parsing application/json
@@ -30,3 +30,4 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/timezone', timezoneRoutes);
 app.use('/api/food-items', foodItemsRoutes);
+app.use('/api/left-overs', leftOverfoodItemsRoutes);
