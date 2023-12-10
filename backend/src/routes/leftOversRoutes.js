@@ -20,7 +20,7 @@ router.get('/', verifyToken, async (req, res) => {
   
         // Fetch food items from MongoDB
         const leftOversItems = await LeftOver.find({ userId: req.user.user_id });
-        console.log(leftOversItems);
+        //console.log(leftOversItems);
         const currentDate = moment().tz(timezone);
   
         const transformedFoodItems = leftOversItems.map(item => {
@@ -42,9 +42,10 @@ router.get('/', verifyToken, async (req, res) => {
   });
 router.post('/', verifyToken, async (req, res) => {
     try {
-        const { name, quantity, expiryDate } = req.body;
+        let { name, quantity, expiryDate } = req.body;
+        quantity = Number(quantity);
         const userId = req.user.user_id;
-        console.log(userId);
+        //console.log(userId);
         // Fetch user's timezone from Firestore
         const userRef = db.collection('users').doc(req.user.email);
         const doc = await userRef.get();
@@ -68,7 +69,7 @@ router.post('/', verifyToken, async (req, res) => {
         if (moment().tz(timezone).isAfter(moment(expiryDate))) {
             return res.status(400).json({ message: "The item is already expired", data: {} });
         }
-        if(quantity === 0){
+        if(quantity <= 0){
             return res.status(400).json({message: "Quantity must be greater than 0",data:{}});
         }
 
@@ -88,10 +89,11 @@ router.post('/', verifyToken, async (req, res) => {
 // Update Leftover Food Item
 router.put('/:id', verifyToken, async (req, res) => {
     try {
-      const { name, quantity, expiryDate } = req.body;
+      let { name, quantity, expiryDate } = req.body;
+      quantity = Number(quantity);
+      //console.log("in put",name,quantity,quantity===0, Number(quantity)===0);
       const userId = req.user.user_id;
       const itemId = req.params.id;
-     
       const imageUrl = await fetchFoodItemImage(name); // Fetch new image URL
 
       // Fetch user's timezone from Firestore...
@@ -108,7 +110,7 @@ router.put('/:id', verifyToken, async (req, res) => {
         return res.status(404).json({ message: 'Item not found for the user', data: {} });
       }
       
-      if(quantity === 0){
+      if(quantity <= 0){
         return res.status(400).json({message: "Please delete the item if the quantity is 0 ",data:{}});
         }
       // Check if the item is already expired
@@ -122,7 +124,7 @@ router.put('/:id', verifyToken, async (req, res) => {
       existingItem.quantity = quantity || existingItem.quantity;
       existingItem.expiryDate = expiryDate || existingItem.expiryDate;
       existingItem.postedDate = postedDate;
-      existingItem.imageUrl = imageUrl ? { ...update, imageUrl } : existingItem.imageUrl;
+      existingItem.imageUrl = imageUrl;
       await existingItem.save();
       res.status(200).json({ message: 'Item updated successfully', data: existingItem });
     } catch (error) {

@@ -18,6 +18,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MailIcon from "@mui/icons-material/Mail";
 import SettingsIcon from '@mui/icons-material/Settings';
 import DinnerDiningIcon from '@mui/icons-material/DinnerDining';
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import ExploreIcon from '@mui/icons-material/Explore';
 import logoImage from '../../../assets/logo5.png'; // Adjust the path as needed
 import PersonIcon from '@mui/icons-material/Person';
@@ -102,13 +103,14 @@ function Header() {
         onKeyDown={toggleDrawer(anchor, false)}
     >
         <List>
-            {['Home', 'Food Items', 'Discover', 'Settings'].map((text, index) => (
+            {['Home', 'Food Items', 'Shop', 'Discover', 'Settings'].map((text, index) => (
                 <ListItem key={text} disablePadding>
                     <ListItemButton onClick={() => handleNavigation(text)}>
                         <ListItemIcon>
                             {text === 'Home' ? <HomeIcon /> : 
                             text === 'Settings' ? <SettingsIcon /> : 
                             text === 'Food Items' ? <DinnerDiningIcon /> : 
+                            text === 'Shop'?<StorefrontIcon/>:
                             text === 'Discover' ? <ExploreIcon /> : 
                             <MailIcon />}
                         </ListItemIcon>
@@ -128,6 +130,9 @@ function Header() {
           case 'Food Items':
                 history.push('/food-items');
               break;
+          case 'Shop':
+            history.push('/shop-food');
+          break;
           case 'Settings':
               history.push('/settings');
               break;
