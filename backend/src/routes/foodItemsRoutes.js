@@ -52,7 +52,7 @@ router.get('/', verifyToken, async (req, res) => {
       const transformedFoodItems = foodItems.map(item => {
           const expiryDate = moment(item.expiryDate).tz(timezone);
           const isExpired = currentDate.isAfter(expiryDate);
-          const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days');
+          const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days') + 1;
 
           return { 
               ...item.toObject(), 
@@ -90,7 +90,7 @@ router.put('/:id', verifyToken, async (req, res) => {
         const currentDate = moment().tz(timezone);
         const expiryDate = moment(foodItem.expiryDate).tz(timezone);
         const isExpired = currentDate.isAfter(expiryDate);
-        const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days');
+        const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days') + 1;
 
         const updatedItem = { 
             ...foodItem.toObject(), 
