@@ -44,10 +44,8 @@ function Header() {
   const handleClose = (event) => {
     setAnchorEl(null);
     let clicked = event.currentTarget.innerText;
-    if(clicked == 'Settings'){
+    if(clicked == 'Profile'){
         history.push("/settings");
-    }else if(clicked == 'Profile'){
-        history.push("/home");
     }
   };
 
@@ -246,7 +244,6 @@ function Header() {
                 }}
                 >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>Settings</MenuItem>
                 <MenuItem onClick={handleClose}><AuthDetails></AuthDetails></MenuItem>
             </Menu>
 
