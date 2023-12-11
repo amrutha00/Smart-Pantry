@@ -106,7 +106,7 @@ function Pantry() {
     setIsLoading(true);
     setItems([]);
     try {
-        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/left-overs";
         const response = await fetch(endpoint, {
           method: "GET",
           headers: {
@@ -114,6 +114,7 @@ function Pantry() {
           },
         });
         const data = await response.json();
+        console.log(data.data);
         setItems(data.data);
         setIsLoading(false);
     } catch (error) {
@@ -124,174 +125,174 @@ function Pantry() {
   };
 
   // State for the add item dialog
-  const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
+  // const [openAddItemDialog, setOpenAddItemDialog] = useState(false);
   
-  const [newItem, setNewItem] = useState({
-    name: '',
-    quantity: '',
-    boughtDate: null,
-    expiryDate: null,
-  });
+  // const [newItem, setNewItem] = useState({
+  //   name: '',
+  //   quantity: '',
+  //   boughtDate: null,
+  //   expiryDate: null,
+  // });
   
   // State for the edit item dialog
-  const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
-  const [editedItem, setEditedItem] = useState({
-    name: '',
-    quantity: '',
-    boughtDate: null,
-    expiryDate: null,
-  });
+  // const [openEditItemDialog, setOpenEditItemDialog] = useState(false);
+  // const [editedItem, setEditedItem] = useState({
+  //   name: '',
+  //   quantity: '',
+  //   boughtDate: null,
+  //   expiryDate: null,
+  // });
 
-  const handleOpenAddItemDialog = () => {
-    setOpenAddItemDialog(true);
-  };
+  // const handleOpenAddItemDialog = () => {
+  //   setOpenAddItemDialog(true);
+  // };
 
-  const handleCloseAddItemDialog = () => {
-    setOpenAddItemDialog(false);
-    setexpiryError(false);
-    setexpiryError2(false);
-    setexpiryError3(false);
-    setNewItem({
-      name: '',
-      quantity: '',
-      boughtDate: null,
-      expiryDate: null,
-    })
-  };
+  // const handleCloseAddItemDialog = () => {
+  //   setOpenAddItemDialog(false);
+  //   setexpiryError(false);
+  //   setexpiryError2(false);
+  //   setexpiryError3(false);
+  //   setNewItem({
+  //     name: '',
+  //     quantity: '',
+  //     boughtDate: null,
+  //     expiryDate: null,
+  //   })
+  // };
 
-  const handleAddItem = async () => {
-    addItems(user);
-  };
+  // const handleAddItem = async () => {
+  //   addItems(user);
+  // };
 
-  const addItems = async (authUser) => {
-    setIsAdding(true);
-    try {
-      const { name, quantity, boughtDate, expiryDate } = newItem;
+  // const addItems = async (authUser) => {
+  //   setIsAdding(true);
+  //   try {
+  //     const { name, quantity, boughtDate, expiryDate } = newItem;
 
-      if (!name || !quantity || !boughtDate || !expiryDate) {
-        console.log("New item fields are empty");
-        setexpiryError3(true);
-        return;
-      }
-      else {
-        setexpiryError3(false);
-      }
+  //     if (!name || !quantity || !boughtDate || !expiryDate) {
+  //       console.log("New item fields are empty");
+  //       setexpiryError3(true);
+  //       return;
+  //     }
+  //     else {
+  //       setexpiryError3(false);
+  //     }
 
-      const currentDate = new Date();
-      const expiry = new Date(expiryDate);
-      const bought = new Date(boughtDate);
-      // Check if the expiryDate is greater than or equal to the current date
-      if (expiry.getTime() < currentDate.getTime()) {
-          setexpiryError(true);
-          console.log("Item already expired error");
-          return;
-      }
+  //     const currentDate = new Date();
+  //     const expiry = new Date(expiryDate);
+  //     const bought = new Date(boughtDate);
+  //     // Check if the expiryDate is greater than or equal to the current date
+  //     if (expiry.getTime() < currentDate.getTime()) {
+  //         setexpiryError(true);
+  //         console.log("Item already expired error");
+  //         return;
+  //     }
 
-      if (expiry.getTime() <= bought.getTime()) {
-          setexpiryError2(true);
-          console.log("Expiry date is before purchase date error");
-          return; 
-      }
+  //     if (expiry.getTime() <= bought.getTime()) {
+  //         setexpiryError2(true);
+  //         console.log("Expiry date is before purchase date error");
+  //         return; 
+  //     }
 
-      const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authUser.accessToken}`
-        },
-        body: JSON.stringify(newItem)
-      });
-      if (!response.ok) {
-        throw new Error('Failed to add new item');
-      }
-      setIsAdding(false);
-      handleCloseAddItemDialog();
-      fetchItems(authUser);
-    } catch (error) {
-      console.error("Error adding new item:", error);
-    } finally {
-      setIsAdding(false);
-    }
-  };
+  //     const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items";
+  //     const response = await fetch(endpoint, {
+  //       method: "POST",
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${authUser.accessToken}`
+  //       },
+  //       body: JSON.stringify(newItem)
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to add new item');
+  //     }
+  //     setIsAdding(false);
+  //     handleCloseAddItemDialog();
+  //     fetchItems(authUser);
+  //   } catch (error) {
+  //     console.error("Error adding new item:", error);
+  //   } finally {
+  //     setIsAdding(false);
+  //   }
+  // };
 
-  const handleCloseEditItemDialog = () => {
-    setOpenEditItemDialog(false);
-    setexpiryError(false);
-    setexpiryError2(false);
-    setexpiryError3(false);
-    setEditedItem({
-      name: '',
-      quantity: '',
-      boughtDate: null,
-      expiryDate: null,
-    })
-  };
+  // const handleCloseEditItemDialog = () => {
+  //   setOpenEditItemDialog(false);
+  //   setexpiryError(false);
+  //   setexpiryError2(false);
+  //   setexpiryError3(false);
+  //   setEditedItem({
+  //     name: '',
+  //     quantity: '',
+  //     boughtDate: null,
+  //     expiryDate: null,
+  //   })
+  // };
 
-  const handleEditItem = (itemToEdit) => {
-    const editedItemWithDayjs = {
-      ...itemToEdit,
-      boughtDate: itemToEdit.boughtDate ? dayjs(itemToEdit.boughtDate) : null,
-      expiryDate: itemToEdit.expiryDate ? dayjs(itemToEdit.expiryDate) : null,
-    };
-    setEditedItem(editedItemWithDayjs);
-    setOpenEditItemDialog(true);
-  };
+  // const handleEditItem = (itemToEdit) => {
+  //   const editedItemWithDayjs = {
+  //     ...itemToEdit,
+  //     boughtDate: itemToEdit.boughtDate ? dayjs(itemToEdit.boughtDate) : null,
+  //     expiryDate: itemToEdit.expiryDate ? dayjs(itemToEdit.expiryDate) : null,
+  //   };
+  //   setEditedItem(editedItemWithDayjs);
+  //   setOpenEditItemDialog(true);
+  // };
 
-  const handleUpdateItem = async () => {
-    updateItem(user);
-  };
+  // const handleUpdateItem = async () => {
+  //   updateItem(user);
+  // };
 
-  const updateItem = async (authUser) => {
-    setIsEditing(true);
-    try {
-      const { name, quantity, boughtDate, expiryDate } = editedItem;
-      if (!name || !quantity || !boughtDate || !expiryDate) {
-        console.log("Fields are empty");
-        setexpiryError3(true);
-        return;
-      }
-      else {
-        setexpiryError3(false);
-      }
-      const currentDate = new Date();
-      const expiry = new Date(expiryDate);
-      const bought = new Date(boughtDate);
-      // Check if the expiryDate is greater than or equal to the current date
-      if (expiry.getTime() < currentDate.getTime()) {
-          setexpiryError(true);
-          console.log("Item already expired error");
-          return;
-      }
+  // const updateItem = async (authUser) => {
+  //   setIsEditing(true);
+  //   try {
+  //     const { name, quantity, boughtDate, expiryDate } = editedItem;
+  //     if (!name || !quantity || !boughtDate || !expiryDate) {
+  //       console.log("Fields are empty");
+  //       setexpiryError3(true);
+  //       return;
+  //     }
+  //     else {
+  //       setexpiryError3(false);
+  //     }
+  //     const currentDate = new Date();
+  //     const expiry = new Date(expiryDate);
+  //     const bought = new Date(boughtDate);
+  //     // Check if the expiryDate is greater than or equal to the current date
+  //     if (expiry.getTime() < currentDate.getTime()) {
+  //         setexpiryError(true);
+  //         console.log("Item already expired error");
+  //         return;
+  //     }
 
-      if (expiry.getTime() <= bought.getTime()) {
-          setexpiryError2(true);
-          console.log("Expiry date is before purchase date error");
-          return; 
-      }
+  //     if (expiry.getTime() <= bought.getTime()) {
+  //         setexpiryError2(true);
+  //         console.log("Expiry date is before purchase date error");
+  //         return; 
+  //     }
 
-      const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
-      const response = await fetch(endpoint, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-        body: JSON.stringify(editedItem),
-      });
+  //     const endpoint = process.env.REACT_APP_BACKEND_API + `/food-items/${editedItem._id}`;
+  //     const response = await fetch(endpoint, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${authUser.accessToken}`,
+  //       },
+  //       body: JSON.stringify(editedItem),
+  //     });
   
-      if (!response.ok) {
-        throw new Error('Failed to update item');
-      }
-      setIsEditing(false);
-      handleCloseEditItemDialog();
-      fetchItems(authUser);
-    } catch (error) {
-      console.error('Error updating item:', error);
-    } finally {
-      setIsEditing(false);
-    }
-  };
+  //     if (!response.ok) {
+  //       throw new Error('Failed to update item');
+  //     }
+  //     setIsEditing(false);
+  //     handleCloseEditItemDialog();
+  //     fetchItems(authUser);
+  //   } catch (error) {
+  //     console.error('Error updating item:', error);
+  //   } finally {
+  //     setIsEditing(false);
+  //   }
+  // };
 
 
   const handleSearchChange = (event) => {
@@ -309,46 +310,46 @@ function Pantry() {
   };
 
 
-  const deleteItem = async (itemId, authUser) => {
-    try {
-        const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/";
-        const response = await fetch(`${endpoint}${itemId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${authUser.accessToken}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to delete item');
-      }
-      fetchItems(authUser);
-    } catch (error) {
-      console.error("Error deleting item:", error);
-    }
-  };
+  // const deleteItem = async (itemId, authUser) => {
+  //   try {
+  //       const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/";
+  //       const response = await fetch(`${endpoint}${itemId}`, {
+  //       method: "DELETE",
+  //       headers: {
+  //         Authorization: `Bearer ${authUser.accessToken}`,
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error('Failed to delete item');
+  //     }
+  //     fetchItems(authUser);
+  //   } catch (error) {
+  //     console.error("Error deleting item:", error);
+  //   }
+  // };
 
   
-  const handleDeleteAllExpired = async () => {
-    try {
-            const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/expired";
-            const response = await fetch(endpoint, {
-            method: "DELETE",
-            headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-            },
-            });
+  // const handleDeleteAllExpired = async () => {
+  //   try {
+  //           const endpoint = process.env.REACT_APP_BACKEND_API + "/food-items/expired";
+  //           const response = await fetch(endpoint, {
+  //           method: "DELETE",
+  //           headers: {
+  //           Authorization: `Bearer ${user.accessToken}`,
+  //           },
+  //           });
             
-            if (response.ok) {
-            fetchItems(user);
-            } else {
-            // Handle API error response
-            throw new Error('Failed to delete expired items');
-            }
+  //           if (response.ok) {
+  //           fetchItems(user);
+  //           } else {
+  //           // Handle API error response
+  //           throw new Error('Failed to delete expired items');
+  //           }
 
-        } catch (error) {
-        console.error("Error deleting expired items", error);
-        }
-    };
+  //       } catch (error) {
+  //       console.error("Error deleting expired items", error);
+  //       }
+  //   };
 
   if (error) {
     return <Typography color="error">{error}</Typography>;
@@ -387,7 +388,7 @@ function Pantry() {
               }}
             />
 
-            <div>
+            {/* <div>
               <StyledAddButton 
                 variant="contained" 
                 sx={{ 
@@ -414,7 +415,7 @@ function Pantry() {
                     >
                       Delete all expired items
               </StyledAddButton>
-            </div>
+            </div> */}
         </div>
         
         <TableContainer component={Paper}>
@@ -424,15 +425,16 @@ function Pantry() {
                 <TableCell></TableCell>
                 <TableCell>Item</TableCell>
                 <TableCell>Expired?</TableCell>
-                <TableCell >Purchase Date</TableCell>
+                <TableCell >Posted Date</TableCell>
                 <TableCell onClick={handleSortByExpiryDate} style={{ cursor: 'pointer' }}>
                   Expiry Date
                   {sortDirection === "asc" ? <ArrowDownwardIcon sx={{ fontSize: 20, color: 'white' }}/> : <ArrowUpwardIcon />}
                 </TableCell>
                 <TableCell >Expires In (days)</TableCell>
                 <TableCell >Qty</TableCell>
-                <TableCell ></TableCell>
-                <TableCell ></TableCell>
+                <TableCell >Contact Email</TableCell>
+                {/* <TableCell ></TableCell>
+                <TableCell ></TableCell> */}
               </TableRow>
             </StyledTableHead>
             <TableBody>
@@ -460,11 +462,12 @@ function Pantry() {
                   </TableCell>
                   <TableCell >{item.name}</TableCell>
                   <TableCell >{item.isExpired ? 'Yes' : 'No'}</TableCell>
-                  <TableCell >{new Date(item.boughtDate).toDateString()}</TableCell>
+                  <TableCell >{new Date(item.postedDate).toDateString()}</TableCell>
                   <TableCell >{new Date(item.expiryDate).toDateString()}</TableCell>
                   <TableCell align="center">{item.NumberOfDaysToExpire}</TableCell>
                   <TableCell >{item.quantity}</TableCell>
-                  <TableCell >
+                  <TableCell >{item.contact}</TableCell>
+                  {/* <TableCell >
                     <ActionButton onClick={() => deleteItem(item._id, user)}>
                       <StyledDeleteIcon />
                     </ActionButton>
@@ -473,7 +476,7 @@ function Pantry() {
                     <ActionButton onClick={() => handleEditItem(item)}>
                         <EditIcon />
                     </ActionButton>
-                  </TableCell>
+                  </TableCell> */}
 
                 </TableRow>
               ))}
@@ -487,7 +490,7 @@ function Pantry() {
         </Box>)}
 
         {/* Add Item Dialog */}
-        <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
+        {/* <Dialog open={openAddItemDialog} onClose={handleCloseAddItemDialog}>
           <DialogTitle>Add New Food Item</DialogTitle>
           <DialogContent>
             <SearchField
@@ -556,10 +559,10 @@ function Pantry() {
               Add
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
 
         {/* Dialog for edit */}
-        <Dialog open={openEditItemDialog} onClose={handleCloseEditItemDialog}>
+        {/* <Dialog open={openEditItemDialog} onClose={handleCloseEditItemDialog}>
           <DialogTitle>Edit Food Item</DialogTitle>
           <DialogContent>
             <TextField
@@ -629,7 +632,7 @@ function Pantry() {
               Save
             </Button>
           </DialogActions>
-        </Dialog>
+        </Dialog> */}
 
       </StyledPaper>
 
