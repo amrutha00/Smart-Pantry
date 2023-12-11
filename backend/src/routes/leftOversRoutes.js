@@ -40,6 +40,38 @@ router.get('/', verifyToken, async (req, res) => {
         res.status(500).json({ message: error.message, data: {} });
     }
   });
+
+  router.get('/all', verifyToken, async (req, res) => {
+    try {
+        // Fetch user's timezone from Firestore
+        const userRef = db.collection('users').doc(req.user.email);
+        const doc = await userRef.get();
+        const userData = doc.data();
+        const timezone = userData ? userData.timezone : 'UTC';
+  
+        // Fetch food items from MongoDB
+        const leftOversItems = await LeftOver.find({ userId: { $ne: req.user.user_id } });
+        //console.log(leftOversItems);
+        const currentDate = moment().tz(timezone);
+  
+        const transformedFoodItems = leftOversItems.map(item => {
+            const expiryDate = moment(item.expiryDate).tz(timezone);
+            const isExpired = currentDate.isAfter(expiryDate);
+            const numberOfDays = isExpired ? 0 : expiryDate.diff(currentDate, 'days');
+  
+            return { 
+                ...item.toObject(), 
+                isExpired, 
+                NumberOfDaysToExpire: numberOfDays 
+            };
+        });
+  
+        res.status(200).json({ message: "OK", data: transformedFoodItems });
+    } catch (error) {
+        res.status(500).json({ message: error.message, data: {} });
+    }
+  });
+
 router.post('/', verifyToken, async (req, res) => {
     try {
         const { name, quantity, expiryDate } = req.body;
