@@ -357,6 +357,7 @@ function Pantry() {
 
   return (
     <Box 
+      bgcolor="grey"
       sx={{ 
         pt: 8, 
         minHeight: '100vh',

@@ -68,6 +68,7 @@ function ShopFood() {
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
       }}
+      bgcolor="grey"
     >
       <Box sx={{ paddingTop: '100px', paddingBottom: '24px', textAlign: 'center' }}>
         <Typography variant="h4" sx={{ color: 'white', mb: 5 }}>
