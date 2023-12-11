@@ -106,7 +106,7 @@ function Pantry() {
     setIsLoading(true);
     setItems([]);
     try {
-        const endpoint = process.env.REACT_APP_BACKEND_API + "/left-overs";
+        const endpoint = process.env.REACT_APP_BACKEND_API + "/left-overs/all";
         const response = await fetch(endpoint, {
           method: "GET",
           headers: {
