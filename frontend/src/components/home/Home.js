@@ -99,6 +99,20 @@ function Home() {
           </CardContent>
         </Card>
       </Box>
+      <Box display="flex" justifyContent="space-around" alignItems="center" paddingX="5%" paddingY="2%">
+        <Card onClick={() => navigateTo('/shop-food')} sx={{ width: '45%', height: 200, '&:hover': { cursor: 'pointer', backgroundColor: 'rgba(255, 255, 255, 0.1)' } }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ textAlign: 'center', fontWeight: 'bold', fontFamily: 'Arial', color: 'white' }}>
+              Shop
+            </Typography>
+            <Box sx={{ marginTop: 2 }}> {/* Adjust the top margin as needed */}
+              <Typography variant="body1" sx={{ textAlign: 'center' }}>
+                Give away and buy food from others
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
     </Box>
   );
 }
