@@ -30,6 +30,7 @@ import { styled } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import SendIcon from '@mui/icons-material/Send';
 import backgroundImage from '../../assets/fooditems.jpg';
 import dayjs from 'dayjs';
 
@@ -86,7 +87,7 @@ function FoodItems() {
   const [isLoading, setIsLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [posteditem, setPostedItem] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(getAuth(), (authUser) => {
@@ -293,6 +294,33 @@ function FoodItems() {
     }
   };
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+  //posting item
+  const handlePostItem = async (itemToPost) => {
+    try{
+    const endpoint = process.env.REACT_APP_BACKEND_API + "/left-overs";
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.accessToken}`
+        },
+        body: JSON.stringify(itemToPost)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to post item');
+      }
+      setPostedItem(true);
+      await sleep(1000);
+    } catch (error) {
+      console.error("Error posting item:", error);
+    } finally{
+        setPostedItem(false);
+    }
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value.toLowerCase());
@@ -434,6 +462,7 @@ function FoodItems() {
                 <TableCell >Qty</TableCell>
                 <TableCell ></TableCell>
                 <TableCell ></TableCell>
+                <TableCell >Post Item</TableCell>
               </TableRow>
             </StyledTableHead>
             <TableBody>
@@ -475,11 +504,17 @@ function FoodItems() {
                         <EditIcon />
                     </ActionButton>
                   </TableCell>
+                  <TableCell >
+                    <ActionButton onClick={() => handlePostItem(item)}>
+                        <SendIcon />
+                    </ActionButton>
+                  </TableCell>
 
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+          {posteditem && <Alert severity="success"> Successfully posted item</Alert>}
         </TableContainer>
 
         {isLoading && (
@@ -547,7 +582,7 @@ function FoodItems() {
             {expiryerror && <Alert severity="error">Item Already Expired</Alert>}
             {expiryerror2 && <Alert severity="error"> Expiry Date should be later than Bought Date</Alert>}
             {expiryerror3 && <Alert severity="error"> Enter all the details to add</Alert>}
-
+            
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseAddItemDialog} color="secondary">

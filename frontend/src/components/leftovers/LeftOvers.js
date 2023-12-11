@@ -409,7 +409,7 @@ function LeftOvers() {
                 }}
                 onClick={handleOpenAddItemDialog}
               >
-                Add Item
+                Post Item
               </StyledAddButton>
 
               <StyledAddButton 
