@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useHistory } from 'react-router-dom';
 import { Box, Card, CardActionArea, Typography, CardContent} from '@mui/material';
-import backgroundImage from '../../assets/home-micro.jpg';
+import backgroundImage from '../../assets/shop3.jpg';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function ShopFood() {
@@ -65,7 +65,8 @@ function ShopFood() {
         backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
       }}
     >
       <Box sx={{ paddingTop: '100px', paddingBottom: '24px', textAlign: 'center' }}>
