@@ -84,21 +84,9 @@ router.post('/', verifyToken, async (req, res) => {
         const userData = doc.data();
         const timezone = userData ? userData.timezone : 'UTC';
         const postedDate = moment().tz(timezone).toDate();
-  
-        // Check if the item is already expired
-        // const existingItem = await LeftOver.findOne({
-        //     userId,
-        //     name: { $regex: new RegExp('^' + name + '$', 'i') }, // Case-insensitive search
-        //     expiryDate: new Date(expiryDate) // Check for the same expiry date
-        // });
 
-        // if (existingItem) {
-        //     // Item with similar name and expiry date exists, update the count
-        //     existingItem.quantity += quantity;
-        //     await existingItem.save();
-        //     return res.status(200).json({ message: "Item exists, count updated", data: existingItem });
-        // }
-        if (moment().tz(timezone).isAfter(moment(expiryDate))) {
+     
+        if (moment().tz(timezone).isAfter(moment(expiryDate).tz(timezone))) {
             return res.status(400).json({ message: "The item is already expired", data: {} });
         }
         if(!isNaN(num_quantity) && num_quantity <= 0){
@@ -147,7 +135,7 @@ router.put('/:id', verifyToken, async (req, res) => {
     }
 
       // Check if the item is already expired
-      if (moment().tz(timezone).isAfter(moment(expiryDate))) {
+      if (moment().tz(timezone).isAfter(moment(expiryDate).tz(timezone))) {
 
         return res.status(400).json({ message: 'The item has expired. Please delete the item', data: {} });
       }

@@ -13,16 +13,17 @@ router.post('/', verifyToken, async (req, res) => {
   try {
       const { name, quantity, boughtDate, expiryDate } = req.body;
       const userId = req.user.user_id;
-
+      
+      
       // Fetch user's timezone from Firestore
       const userRef = db.collection('users').doc(req.user.email);
       const doc = await userRef.get();
       const userData = doc.data();
       const timezone = userData ? userData.timezone : 'UTC';
-      console.log(timezone);
-
-      // Check if the item is already expired
-      if (moment().tz(timezone).isAfter(moment(expiryDate))) {
+      
+      
+      if (moment().tz(timezone).isAfter(moment(expiryDate).tz(timezone))) {
+          //console.log(moment(expiryDate));
           return res.status(400).json({ message: "The item is already expired", data: {} });
       }
 
