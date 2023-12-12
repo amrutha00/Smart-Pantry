@@ -86,18 +86,18 @@ router.post('/', verifyToken, async (req, res) => {
         const postedDate = moment().tz(timezone).toDate();
   
         // Check if the item is already expired
-        const existingItem = await LeftOver.findOne({
-            userId,
-            name: { $regex: new RegExp('^' + name + '$', 'i') }, // Case-insensitive search
-            expiryDate: new Date(expiryDate) // Check for the same expiry date
-        });
+        // const existingItem = await LeftOver.findOne({
+        //     userId,
+        //     name: { $regex: new RegExp('^' + name + '$', 'i') }, // Case-insensitive search
+        //     expiryDate: new Date(expiryDate) // Check for the same expiry date
+        // });
 
-        if (existingItem) {
-            // Item with similar name and expiry date exists, update the count
-            existingItem.quantity += quantity;
-            await existingItem.save();
-            return res.status(200).json({ message: "Item exists, count updated", data: existingItem });
-        }
+        // if (existingItem) {
+        //     // Item with similar name and expiry date exists, update the count
+        //     existingItem.quantity += quantity;
+        //     await existingItem.save();
+        //     return res.status(200).json({ message: "Item exists, count updated", data: existingItem });
+        // }
         if (moment().tz(timezone).isAfter(moment(expiryDate))) {
             return res.status(400).json({ message: "The item is already expired", data: {} });
         }
@@ -154,8 +154,17 @@ router.put('/:id', verifyToken, async (req, res) => {
   
       // Update the item fields
       existingItem.name = name || existingItem.name;
-      existingItem.quantity = quantity || existingItem.quantity;
+      // if(!isNaN(num_quantity) && num_quantity){
+      //   console.log("existiting item quantity",num_quantity);
+      //   existingItem.quantity = parseInt(existingItem.quantity)+ num_quantity;
+      //   //)
+      //   console.log("existiting item quantity",num_quantity);
+      // }
+      // else{
+      //   existingItem.quantity = existingItem.quantity;
+      // }
       existingItem.expiryDate = expiryDate || existingItem.expiryDate;
+      existingItem.quantity = quantity || existingItem.quantity;
       existingItem.postedDate = postedDate;
       existingItem.imageUrl = imageUrl;
       await existingItem.save();
