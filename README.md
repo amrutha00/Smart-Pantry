@@ -1,20 +1,20 @@
-# FreshPlate
+# Smart Pantry
 
-FreshPlate is a WebApp which helps users to manage their pantry, manage leftover food items, buy leftovers from others and discover new recipes.
+Smart Pantry establishes a dynamic marketplace for food management, enabling users to seamlessly organize their pantry, efficiently handle surplus items, engage in purchasing from others, and explore a diverse range of enticing recipes, all accessible within a user-friendly web application.
 
 # Technologies used
 
-Front End implemented with React
+Front End: React
 
-Back End implemented with Node and Express
+Back End: Node and Express
 
-Front End hosted in gitlab
+Front End hosting: gitlab
 
-Back End hosted in Render
+Back End hosting: Render
 
-User Authentication is done using Firebase
+User Authentication: Firebase
 
-Database used - MongoDB Atlas
+Database: MongoDB Atlas
 
 # Back End Set Up
 
